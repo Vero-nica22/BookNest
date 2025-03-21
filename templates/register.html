@@ -1,33 +1,4 @@
 <!-- <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registro - BookNest</title>
-    <script src="/static/script.js"></script> -->
-
-    <!-- <script src="/static/script.js"></script> -->
-
-    <!-- <script src="/static/script.js" defer></script> -->
-<!-- </head>
-<body>
-    <h2>Registro</h2>
-    <form id="registroForm">
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="text" id="apellido" placeholder="Apellido" required>
-        <input type="text" id="documento_identidad" placeholder="Documento de Identidad" required>
-        <input type="text" id="celular" placeholder="Celular" required>
-        <input type="email" id="correo" placeholder="Correo electrónico" required>
-        <input type="password" id="contrasena" placeholder="Contraseña" required>
-        <button id="miBoton">Registrar</button>
-    </form> -->
-<!-- En register.htm, antes de cerrar </body> -->
-
-
-<!-- 
-</body> -->
-<!-- </html> -->
-
-<!DOCTYPE html>
 <html>
 <head>
     <title>Registro</title>
@@ -53,5 +24,55 @@
         <input type="password" name="contrasena" placeholder="Contraseña" required>
         <button type="submit">Crear cuenta</button>
     </form>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registerstyle.css') }}">
+</head>
+<body>
+    <div class="contenedor-principal">
+        <h1>Regístrate</h1>
+        <form method="POST" id="formulario-registro" class="formulario-registro">
+            <div class="fila-campos">
+                <div class="campo-formulario">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" required>
+                </div>
+                <div class="campo-formulario">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" required>
+                </div>
+            </div>
+            <div class="fila-campos">
+                <div class="campo-formulario">
+                    <label for="documento">Documento de Identidad</label>
+                    <input type="text" name="documento" id="documento" required>
+                </div>
+                <div class="campo-formulario">
+                    <label for="celular">Celular</label>
+                    <input type="text" name="celular" id="celular" required>
+                </div>
+            </div>
+            <div class="fila-campos">
+                <div class="campo-formulario">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" name="correo" id="correo" required>
+                </div>
+                <div class="campo-formulario">
+                    <label for="contrasena">Crear Contraseña</label>
+                    <input type="password" name="contrasena" id="contrasena" required>
+                </div>
+            </div>
+            <button type="submit">Crear Cuenta</button>
+        </form>
+        {% if mensaje %}
+        <p id="mensaje" class="mensaje {{ mensaje_class }}">{{ mensaje }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>

@@ -1,0 +1,94 @@
+
+body {
+    font-family: sans-serif;
+    background-color: #FCEBD9; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.contenedor-principal {
+    background-color: #F3DBC3; 
+    padding: 100px;
+    border-radius: 10px;
+    text-align: center;
+    width: 1000px; 
+    margin: 20px;
+}
+
+h1 {
+    color: #5B5A5A;
+    margin-bottom: 20px;
+}
+
+
+.formulario-registro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fila-campos {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.campo-formulario {
+    width: 48%; 
+    text-align: left;
+}
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.campo-formulario input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    box-sizing: border-box;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-registro button {
+    background-color: #E4A27F;
+    color: rgb(0, 0, 0);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.formulario-registro button:hover {
+    background-color: #ecc0a6;
+}
+
+.mensaje {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.mensaje.exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mensaje.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+

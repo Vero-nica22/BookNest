@@ -1,0 +1,85 @@
+body {
+  font-family: sans-serif;
+  background-color: #FCEBD9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.contenedor-principal {
+  background-color: #F3DBC3;
+  padding: 100px;
+  text-align: center;
+  width: 1000px; 
+  margin: 20px;
+}
+
+.contenedor-logo img {
+  width: 200px; 
+  /* margin-bottom: 10px; */
+}
+
+h1 {
+  color: #5B5A5A;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+
+.formulario-login {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-formulario {
+  margin-bottom: 20px;
+}
+
+.campo-formulario label {
+  display: block;
+  margin-bottom: 5px;
+  align-items: left;
+  margin: 2.5px 200px; 
+  width: 200px; 
+}
+
+
+.campo-formulario input {
+  width: 500px;
+  max-width: 950px;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  box-sizing: border-box;
+  font-size: 16px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.campo-formulario input:focus {
+  outline: none;
+  border-color: #bbb;
+}
+
+.formulario-login button {
+  background-color: #E4A27F; 
+  color: rgb(55, 55, 55); 
+  padding: 12px 20px; 
+  border: none; 
+  border-radius: 25px; 
+  font-size: 16px; 
+  cursor: pointer;
+  display: block; 
+  margin: 2px auto; 
+  width: 200px; 
+  max-width: 250px; 
+  text-align: center; 
+}
+
+.formulario-login button:hover {
+  background-color: #ecc0a6; 
+}

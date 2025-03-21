@@ -8,7 +8,7 @@ db = mysql.connector.connect(**DB_CONFIG)
 
 auth = Blueprint('auth', __name__)
 
-# Configura tu conexión a la base de datos aquí (puedes moverla a otro archivo si deseas)
+
 db = mysql.connector.connect(
     host="localhost",
     user="miusuario",
@@ -16,9 +16,16 @@ db = mysql.connector.connect(
     database="booknest"
 )
 
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.security import generate_password_hash
+import mysql.connector
+
+# ... tu configuración de la base de datos ...
+
 @auth.route('/registro', methods=['GET', 'POST'])
 def registro():
     mensaje = None
+    mensaje_class = None
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']
@@ -35,15 +42,17 @@ def registro():
             """, (nombre, apellido, documento, celular, correo, contrasena))
             db.commit()
             mensaje = "¡Registro exitoso!"
+            mensaje_class = "exito"
         except mysql.connector.Error as err:
             mensaje = f"Error: {err}"
-    return render_template('register.html', mensaje=mensaje)
+            mensaje_class = "error"
+    return render_template('register.html', mensaje=mensaje, mensaje_class=mensaje_class)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        correo = request.form['correo']
+        correo = request.form['usuario']
         contrasena = request.form['contrasena']
 
         cursor = db.cursor(dictionary=True)
@@ -56,11 +65,11 @@ def login():
         usuario = cursor.fetchone()
 
         if usuario and check_password_hash(usuario['contrasena'], contrasena):
-            # Almacena la información en la sesión
+            
             session['usuario_id'] = usuario['id_usuario']
             session['rol'] = usuario['nombre_rol']
 
-            # Redirige según el rol
+
             if usuario['nombre_rol'] == 'cliente':
                 return redirect('/menu_cliente')
             elif usuario['nombre_rol'] == 'administrador':
@@ -73,5 +82,17 @@ def login():
 @auth.route('/menu_cliente')
 @requiere_rol('cliente')
 def menu_cliente():
-    print("Cargando menu_cliente.html")  # Depuración
+    print("Cargando menu_cliente.html")  
     return render_template('menu_cliente.html')
+
+@auth.route('/menu_administrador')
+@requiere_rol('administrador')
+def menu_administrador():
+    print("Cargando menu_administrador.html")  # Depuración
+    return render_template('menu_administrador.html')
+
+@auth.route('/menu_gerente')
+@requiere_rol('gerente')
+def menu_gerente():
+    print("Cargando menu_gerente.html")  # Depuración
+    return render_template('menu_gerente.html')

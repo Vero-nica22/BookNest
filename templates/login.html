@@ -1,19 +1,29 @@
-<!-- <form id="loginForm">
-    <input type="email" id="correo" placeholder="Correo" required>
-    <input type="password" id="contrasena" placeholder="Contraseña" required>
-    <button type="submit">Iniciar Sesión</button>
-</form> -->
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inicio de Sesión</title>
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='loginstyle.css') }}">
 </head>
 <body>
-    <h1>Inicio de Sesión</h1>
-    <form method="POST">
-        <input type="email" name="correo" placeholder="Correo Electrónico" required>
-        <input type="password" name="contrasena" placeholder="Contraseña" required>
-        <button type="submit">Iniciar Sesión</button>
+  <div class="contenedor-principal">
+    <div class="contenedor-logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+      <h1>Iniciar Sesión</h1>
+      <p>¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
+    </div>
+    <form method="POST" class="formulario-login">
+      <div class="campo-formulario">
+        <label for="usuario">Usuario</label>
+        <input type="text" name="usuario" id="usuario" placeholder="Escribe tu usuario...">
+      </div>
+      <div class="campo-formulario">
+        <label for="contrasena">Contraseña</label>
+        <input type="password" name="contrasena" id="contrasena" placeholder="Escribe tu contraseña...">
+      </div>
+      <button type="submit">Iniciar Sesión</button>
     </form>
+    
+  </div>
 </body>
 </html>
