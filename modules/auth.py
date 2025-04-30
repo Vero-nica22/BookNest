@@ -16,12 +16,6 @@ db = mysql.connector.connect(
     database="booknest"
 )
 
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.security import generate_password_hash
-import mysql.connector
-
-# ... tu configuración de la base de datos ...
-
 @auth.route('/registro', methods=['GET', 'POST'])
 def registro():
     mensaje = None
@@ -52,7 +46,7 @@ def registro():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        correo = request.form['usuario']
+        correo = request.form['correo']
         contrasena = request.form['contrasena']
 
         cursor = db.cursor(dictionary=True)
