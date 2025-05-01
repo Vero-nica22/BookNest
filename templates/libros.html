@@ -15,26 +15,29 @@
       padding: 10px 20px;
     }
 
-    header .top-header {
+    .top-header {
       display: flex;
       align-items: center;
       gap: 15px;
     }
 
-    header img {
-      height: 50px;
+    .top-header img {
+      height: 95px;
+    }
+
+    .top-header p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 18px;
     }
 
     nav ul {
       list-style: none;
       display: flex;
+      justify-content: center;
       gap: 40px;
       padding: 0;
       margin-top: 10px;
-    }
-
-    nav li {
-      display: inline;
     }
 
     nav a {
@@ -46,6 +49,8 @@
     .banner img {
       width: 100%;
       height: auto;
+      max-height: 500px;
+      object-fit: cover;
     }
 
     main {
@@ -62,6 +67,7 @@
     }
 
     .libro {
+      position: relative;
       width: 180px;
       text-align: left;
     }
@@ -69,9 +75,36 @@
     .libro img {
       width: 100%;
       height: auto;
+      border-radius: 5px;
     }
 
-    button {
+    .iconos {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 5px;
+      z-index: 2;
+    }
+
+    .iconos button {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: background-color 0.2s;
+    }
+
+    .iconos button:hover {
+      background-color: #e0d3bb;
+    }
+
+    button.agregar {
       margin-top: 30px;
       padding: 10px 20px;
       background-color: #d4b48a;
@@ -90,8 +123,8 @@
 
   <header>
     <div class="top-header">
-      <img src="Logobooknest.png" alt="Logo"> <!-- Cambia la URL si tienes tu propio logo -->
-      <p><strong>Menú Libros Administrador</strong></p>
+      <img src="Logobooknest.png" alt="Logo">
+      <!--<p><strong>Libros Administrador</strong></p>-->
     </div>
     <nav>
       <ul>
@@ -104,44 +137,66 @@
   </header>
 
   <section class="banner">
-    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg?t=st=1746115903~exp=1746119503~hmac=339289eeb3df7bd5d94f76e352a0624eb28f41f49c30cd41372ce4381cb8521c&w=1800" alt="Banner">
+    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
   </section>
 
   <main>
     <h2>Catálogo de Libros</h2>
     <div class="libros">
+
       <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
         <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/8a/9e/8a9ed4b676d987ffb8f1cece4aa5ad2a.jpg" alt="Bajo la Misma Estrella">
         <p><strong>Bajo la Misma Estrella</strong><br>John Green</p>
         <p>Hazel tiene dieciséis años, está enferma de cáncer desde pequeña y sobrevive gracias a un milagro médico que la mantiene con vida.</p>
       </div>
 
       <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
         <img src="https://libreriasiglo.com/91502-large_360/romeo-y-julieta.webp" alt="Romeo y Julieta">
         <p><strong>Romeo y Julieta</strong><br>William Shakespeare</p>
         <p>Dos jóvenes enamorados de familias enemigas viven una historia trágica llena de amor y destino.</p>
       </div>
 
       <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
         <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/6a/ca/6acabcfa8d03abc2b853155997d4b21d.jpg" alt="El Diario de Ana Frank">
         <p><strong>El Diario de Ana Frank</strong><br>Ana Frank</p>
         <p>Esta historia narra el diario de vida de una niña judía que se escondió de los nazis durante la Segunda Guerra Mundial.</p>
       </div>
 
       <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
         <img src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg" alt="Harry Potter">
         <p><strong>Harry Potter y la Piedra Filosofal</strong><br>J.K. Rowling</p>
         <p>Harry descubre que es un mago y asiste a la escuela Hogwarts, donde vive sus primeras aventuras mágicas.</p>
       </div>
 
       <div class="libro">
-        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567._RS360x360_.jpg" alt="El Principito">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567.RS360x360.jpg" alt="El Principito">
         <p><strong>El Principito</strong><br>Antoine de Saint-Exupéry</p>
         <p>Un pequeño príncipe viaja por el universo aprendiendo sobre la vida, el amor y la soledad a través de distintas experiencias.</p>
       </div>
+
     </div>
 
-    <button>Agregar Nuevos Libros</button>
+    <button class="agregar">Agregar Nuevos Libros</button>
   </main>
 
 </body>
