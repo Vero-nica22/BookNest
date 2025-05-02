@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from config import DB_CONFIG
 from utils import requiere_rol
 db = mysql.connector.connect(**DB_CONFIG)
+
 
 
 auth = Blueprint('auth', __name__)
@@ -15,12 +16,6 @@ db = mysql.connector.connect(
     password="22",
     database="booknest"
 )
-
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.security import generate_password_hash
-import mysql.connector
-
-# ... tu configuración de la base de datos ...
 
 @auth.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -52,7 +47,7 @@ def registro():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        correo = request.form['usuario']
+        correo = request.form['correo']
         contrasena = request.form['contrasena']
 
         cursor = db.cursor(dictionary=True)
@@ -88,11 +83,70 @@ def menu_cliente():
 @auth.route('/menu_administrador')
 @requiere_rol('administrador')
 def menu_administrador():
-    print("Cargando menu_administrador.html")  # Depuración
+    print("Cargando menu_administrador.html")  
     return render_template('menu_administrador.html')
 
 @auth.route('/menu_gerente')
 @requiere_rol('gerente')
 def menu_gerente():
-    print("Cargando menu_gerente.html")  # Depuración
+    print("Cargando menu_gerente.html")  
     return render_template('menu_gerente.html')
+
+
+@auth.route('/productos', methods=['GET', 'POST'])
+@requiere_rol('administrador')
+def productos():
+    cursor = db.cursor(dictionary=True)
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        imagen_url = request.form['imagen_url']
+
+        cursor.execute("INSERT INTO productos (nombre, descripcion, imagen_url) VALUES (%s, %s, %s)", 
+                    (nombre, descripcion, imagen_url))
+        db.commit()
+        flash('Producto agregado exitosamente', 'success')
+        
+        # 🚨 Aquí rediriges para evitar reenvío al recargar
+        return redirect(url_for('auth.productos'))
+
+    cursor.execute("SELECT * FROM productos")
+    productos = cursor.fetchall()
+
+    return render_template('productos_admi.html', productos=productos)
+
+@auth.route('/eliminar_producto/<int:id_producto>', methods=['POST'])
+@requiere_rol('administrador')
+def eliminar_producto(id_producto):
+    cursor = db.cursor(dictionary=True)
+    
+    cursor.execute("DELETE FROM productos WHERE id_producto = %s", (id_producto,))
+    db.commit()
+    
+    flash('Success', 'El producto fue eliminado')
+    
+    return redirect(url_for('auth.productos'))  # Redirige de nuevo a la página de productos
+
+@auth.route('/actualizar_producto/<int:id>', methods=['GET', 'POST'])
+@requiere_rol('administrador')
+def actualizar_producto(id):
+    cursor = db.cursor(dictionary=True)
+    
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        imagen_url = request.form['imagen_url']
+
+        cursor.execute("""
+            UPDATE productos 
+            SET nombre = %s, descripcion = %s, imagen_url = %s 
+            WHERE id_producto = %s
+        """, (nombre, descripcion, imagen_url, id))
+        db.commit()
+        flash('Producto actualizado con éxito', 'success')
+        return redirect(url_for('auth.productos'))
+
+    cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
+    producto = cursor.fetchone()
+    return render_template('actualizar_producto.html', producto=producto)

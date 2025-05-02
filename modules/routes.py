@@ -17,3 +17,8 @@ def menu_administrador():
 @requiere_rol('gerente')
 def menu_gerente():
     return render_template('menu_gerente.html')
+
+# @auth.route('/productos')
+# @requiere_rol('administrador')
+# def productos():
+#     return render_template('productos_admi.html')
