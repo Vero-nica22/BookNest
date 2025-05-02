@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catálogo de Libros - Gerente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f0e3;
+    }
+
+    header {
+      background-color: #fef3dc;
+      padding: 10px 20px;
+    }
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-header img {
+      height: 90px;
+    }
+
+    .top-header p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    main {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .libros {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .libro {
+      width: 180px;
+      text-align: left;
+      position: relative;
+    }
+
+    .libro img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visualizar {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #ffffffcc;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px 6px;
+      border-radius: 4px;
+    }
+
+    .visualizar:hover {
+      background-color: #f0e2c6;
+      transform: scale(1.1);
+    }
+
+    button.ver-mas {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #d4b48a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    h2 {
+      color: #3e3e3e;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="top-header">
+      <img src="Logobooknest.png" alt="Logo">
+      <!--<p><strong>Libros</strong></p>-->
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Buscar Libros</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Libros</a></li>
+        <li><a href="#">Reservas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
+  </section>
+
+  <main>
+    <h2>Encuentra tus libros favoritos aquí</h2>
+    <div class="libros">
+
+      <div class="libro">
+        <button class="visualizar" title="Visualizar">👁</button>
+        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/8a/9e/8a9ed4b676d987ffb8f1cece4aa5ad2a.jpg" alt="Bajo la Misma Estrella">
+        <p><strong>Bajo la Misma Estrella</strong><br>John Green</p>
+        <p>Hazel tiene dieciséis años, está enferma de cáncer desde pequeña y sobrevive gracias a un milagro médico.</p>
+      </div>
+
+      <div class="libro">
+        <button class="visualizar" title="Visualizar">👁</button>
+        <img src="https://libreriasiglo.com/91502-large_360/romeo-y-julieta.webp" alt="Romeo y Julieta">
+        <p><strong>Romeo y Julieta</strong><br>William Shakespeare</p>
+        <p>Dos jóvenes enamorados de familias enemigas viven una historia trágica llena de amor y destino.</p>
+      </div>
+
+      <div class="libro">
+        <button class="visualizar" title="Visualizar">👁</button>
+        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/6a/ca/6acabcfa8d03abc2b853155997d4b21d.jpg" alt="El Diario de Ana Frank">
+        <p><strong>El Diario de Ana Frank</strong><br>Ana Frank</p>
+        <p>Diario de una niña judía que se esconde de los nazis durante la Segunda Guerra Mundial.</p>
+      </div>
+
+      <div class="libro">
+        <button class="visualizar" title="Visualizar">👁</button>
+        <img src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg" alt="Harry Potter">
+        <p><strong>Harry Potter y la Piedra Filosofal</strong><br>J.K. Rowling</p>
+        <p>Harry descubre que es un mago y asiste a Hogwarts, donde vive sus primeras aventuras mágicas.</p>
+      </div>
+
+      <div class="libro">
+        <button class="visualizar" title="Visualizar">👁</button>
+        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567.RS360x360.jpg" alt="El Principito">
+        <p><strong>El Principito</strong><br>Antoine de Saint-Exupéry</p>
+        <p>Un pequeño príncipe viaja por el universo aprendiendo sobre la vida, el amor y la soledad.</p>
+      </div>
+
+    </div>
+
+    <button class="ver-mas">Ver más Libros</button>
+  </main>
+
+</body>
+</html>

@@ -2,81 +2,202 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>BookNest - Catálogo de Libros</title>
-  <link rel="stylesheet" href="static/styles.css">
+  <title>Catálogo de Libros - Administrador</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f0e3;
+    }
+
+    header {
+      background-color: #fef3dc;
+      padding: 10px 20px;
+    }
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-header img {
+      height: 95px;
+    }
+
+    .top-header p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    main {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .libros {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .libro {
+      position: relative;
+      width: 180px;
+      text-align: left;
+    }
+
+    .libro img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .iconos {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 5px;
+      z-index: 2;
+    }
+
+    .iconos button {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: background-color 0.2s;
+    }
+
+    .iconos button:hover {
+      background-color: #e0d3bb;
+    }
+
+    button.agregar {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #d4b48a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    h2 {
+      color: #3e3e3e;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <div class="logo">
-        <img src="static/img/logo.png" alt="Logo de BookNest">
-        <h2>BookNest</h2>
+
+  <header>
+    <div class="top-header">
+      <img src="Logobooknest.png" alt="Logo">
+      <!--<p><strong>Libros Administrador</strong></p>-->
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Buscar Libros</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Libros</a></li>
+        <li><a href="#">Reservas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
+  </section>
+
+  <main>
+    <h2>Catálogo de Libros</h2>
+    <div class="libros">
+
+      <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/8a/9e/8a9ed4b676d987ffb8f1cece4aa5ad2a.jpg" alt="Bajo la Misma Estrella">
+        <p><strong>Bajo la Misma Estrella</strong><br>John Green</p>
+        <p>Hazel tiene dieciséis años, está enferma de cáncer desde pequeña y sobrevive gracias a un milagro médico que la mantiene con vida.</p>
       </div>
-      <nav>
-        <ul>
-          <li><a href="#">Inicio</a></li>
-          <li><a href="#">Usuarios</a></li>
-          <li><a href="#" class="active">Libros</a></li>
-          <li><a href="#">Préstamos</a></li>
-          <li><a href="#">Configuración</a></li>
-        </ul>
-      </nav>
-    </aside>
-  
-    <main class="main-content">
-      <header class="top-bar">
-        <h1>Gestión de libros</h1>
-        <button class="add-btn">+ Añadir libro</button>
-      </header>
-  
-      <table class="book-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Portada</th>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Género</th>
-            <th>Editorial</th>
-            <th>Año</th>
-            <th>Disponibilidad</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td><img src="static/img/cien-anos.jpg" alt="Portada" class="book-cover"></td>
-            <td>Cien Años de Soledad</td>
-            <td>Gabriel García Márquez</td>
-            <td>Realismo mágico</td>
-            <td>Sudamericana</td>
-            <td>1967</td>
-            <td>Disponible</td>
-            <td>
-              <button class="edit-btn">Editar</button>
-              <button class="delete-btn">Eliminar</button>
-            </td>
-          </tr>
-          </tbody>
-      </table>
-    </main>
-  </div>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  
+
+      <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://libreriasiglo.com/91502-large_360/romeo-y-julieta.webp" alt="Romeo y Julieta">
+        <p><strong>Romeo y Julieta</strong><br>William Shakespeare</p>
+        <p>Dos jóvenes enamorados de familias enemigas viven una historia trágica llena de amor y destino.</p>
+      </div>
+
+      <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/6a/ca/6acabcfa8d03abc2b853155997d4b21d.jpg" alt="El Diario de Ana Frank">
+        <p><strong>El Diario de Ana Frank</strong><br>Ana Frank</p>
+        <p>Esta historia narra el diario de vida de una niña judía que se escondió de los nazis durante la Segunda Guerra Mundial.</p>
+      </div>
+
+      <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg" alt="Harry Potter">
+        <p><strong>Harry Potter y la Piedra Filosofal</strong><br>J.K. Rowling</p>
+        <p>Harry descubre que es un mago y asiste a la escuela Hogwarts, donde vive sus primeras aventuras mágicas.</p>
+      </div>
+
+      <div class="libro">
+        <div class="iconos">
+          <button>✏</button>
+          <button>🗑</button>
+        </div>
+        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567.RS360x360.jpg" alt="El Principito">
+        <p><strong>El Principito</strong><br>Antoine de Saint-Exupéry</p>
+        <p>Un pequeño príncipe viaja por el universo aprendiendo sobre la vida, el amor y la soledad a través de distintas experiencias.</p>
+      </div>
+
+    </div>
+
+    <button class="agregar">Agregar Nuevos Libros</button>
+  </main>
+
+</body>
+</html>
