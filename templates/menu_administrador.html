@@ -1,13 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Menú del Administrador</title>
-</head>
-<body>
-    <h1>¡Bienvenido, Administrador!</h1>
-    <p>Aquí puedes gestionar usuarios, libros y reservas.</p>
-</body>
-</html> -->
 
 <!DOCTYPE html>
 <html>
@@ -17,14 +7,14 @@
 </head>
 <body>
     <header>
-        <!-- <div class="menu-cliente">Menú Cliente</div> -->
+        
         <nav>
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
             <ul>
                 <li><a href="#">Buscar libros</a></li>
                 <li><a href="#">Libros</a></li>
                 <li><a href="#">Reservas</a></li>
-                <li><a href="#">Productos</a></li>
+                <li><a href="/productos">Productos</a></li>
             </ul>
             <button class="cerrar-sesion">Cerrar sesión</button>
         </nav>
