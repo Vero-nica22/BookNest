@@ -1,19 +1,19 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from config import DB_CONFIG
 from utils import requiere_rol
+import os
+from werkzeug.utils import secure_filename
+
 db = mysql.connector.connect(**DB_CONFIG)
-
-
-
 auth = Blueprint('auth', __name__)
 
 
 db = mysql.connector.connect(
     host="localhost",
-    user="miusuario",
-    password="22",
+    user="usuario",
+    password="",
     database="booknest"
 )
 
@@ -93,6 +93,12 @@ def menu_gerente():
     return render_template('menu_gerente.html')
 
 
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @auth.route('/productos', methods=['GET', 'POST'])
 @requiere_rol('administrador')
 def productos():
@@ -101,20 +107,27 @@ def productos():
     if request.method == 'POST':
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
-        imagen_url = request.form['imagen_url']
+        imagen = request.files['imagen']
 
-        cursor.execute("INSERT INTO productos (nombre, descripcion, imagen_url) VALUES (%s, %s, %s)", 
-                    (nombre, descripcion, imagen_url))
+        if imagen and allowed_file(imagen.filename):
+            filename = secure_filename(imagen.filename)
+            imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)  
+            imagen.save(imagen_path)
+        else:
+            filename = None
+
+        cursor.execute("INSERT INTO productos (nombre, descripcion, imagen_nombre) VALUES (%s, %s, %s)", 
+                    (nombre, descripcion, filename))
         db.commit()
+
         flash('Producto agregado exitosamente', 'success')
-        
-        # 🚨 Aquí rediriges para evitar reenvío al recargar
         return redirect(url_for('auth.productos'))
 
     cursor.execute("SELECT * FROM productos")
     productos = cursor.fetchall()
 
     return render_template('productos_admi.html', productos=productos)
+
 
 @auth.route('/eliminar_producto/<int:id_producto>', methods=['POST'])
 @requiere_rol('administrador')
@@ -126,7 +139,7 @@ def eliminar_producto(id_producto):
     
     flash('Success', 'El producto fue eliminado')
     
-    return redirect(url_for('auth.productos'))  # Redirige de nuevo a la página de productos
+    return redirect(url_for('auth.productos')) 
 
 @auth.route('/actualizar_producto/<int:id>', methods=['GET', 'POST'])
 @requiere_rol('administrador')
@@ -150,3 +163,7 @@ def actualizar_producto(id):
     cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
     producto = cursor.fetchone()
     return render_template('actualizar_producto.html', producto=producto)
+
+
+
+
