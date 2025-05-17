@@ -27,12 +27,17 @@
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
         <h2>Agregar Producto</h2>
-        <form action="/productos" method="POST">
-            <input type="text" name="nombre" placeholder="Nombre del producto" required>
-            <textarea name="descripcion" placeholder="Descripción del producto" required></textarea>
-            <input type="text" name="imagen_url" placeholder="URL de la imagen">
+        <form action="/productos" method="POST" enctype="multipart/form-data">
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre del producto" required>
+            <textarea name="descripcion" id="descripcion" placeholder="Descripción del producto" required></textarea>
+            <label for="file-upload" class="custom-file-upload">
+                Seleccionar Imagen
+            </label>
+            <input type="file" id="file-upload" name="imagen" accept="image/*">
             <button type="submit">Agregar Producto</button>
         </form>
+
+
     </div>
 </div>
 <div class="modal" id="editModal">
@@ -61,7 +66,8 @@
             {% for producto in productos %}
             <div class="product">
                 <h2>{{ producto.nombre }}</h2>
-                <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" width="200px">
+                <!-- <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" width="200px"> -->
+                <img src="{{ url_for('static', filename='uploads/' + producto.imagen_nombre) }}" alt="{{ producto.nombre }}" width="200px">
                 <p>{{ producto.descripcion }}</p>
                 
                 <div class="botones-container">
@@ -165,3 +171,16 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById("file-upload").addEventListener("change", function() {
+        localStorage.setItem("nombreProducto", document.getElementById("nombre").value);
+        localStorage.setItem("descripcionProducto", document.getElementById("descripcion").value);
+    });
+
+    window.addEventListener("load", function() {
+        document.getElementById("nombre").value = localStorage.getItem("nombreProducto") || "";
+        document.getElementById("descripcion").value = localStorage.getItem("descripcionProducto") || "";
+    });
+</script>
+
