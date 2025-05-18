@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Realizar Reserva</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <form class="reserva-form" method="POST" action="{{ url_for('auth.guardar_reserva') }}">
+            <h2>Realizar reserva</h2>
+
+            
+            <input type="hidden" name="id_usuario" value="{{ usuario['id_usuario'] }}" />
+            <input type="hidden" name="id_libro" value="{{ libro['id_libro'] }}" />
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ usuario['nombre'] }}" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" value="{{ usuario['apellido'] }}" readonly />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="libro">Libro</label>
+                <input type="text" id="libro" name="libro" value="{{ libro['titulo'] }}" readonly />
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.guardar_reserva') }}">
+                <input type="hidden" name="id_usuario" value="{{ usuario['id_usuario'] }}" />
+                <input type="hidden" name="id_libro" value="{{ libro['id_libro'] }}" />
+
+                <div class="form-row horario">
+                    <label>Horario</label>
+                    <input type="number" name="dia" placeholder="Día" min="1" max="31" required />
+                    <input type="number" name="mes" placeholder="Mes" min="1" max="12" required />
+                    <input type="number" name="anio" placeholder="Año" min="2023" max="2100" required />
+                    <input type="time" name="hora" placeholder="Hora" required />
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" onclick="window.history.back();">Cancelar</button>
+                    <button type="submit">Reservar</button>
+                </div>
+            </form>
+
+    </div>
+</body>
+</html>

@@ -5,6 +5,7 @@ from config import DB_CONFIG
 from utils import requiere_rol
 import os
 from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
 
 db = mysql.connector.connect(**DB_CONFIG)
 auth = Blueprint('auth', __name__)
@@ -252,3 +253,151 @@ def editar_libro(id_libro):
         flash('Libro no encontrado', 'error')
         return redirect(url_for('auth.libros'))
     return render_template('editar_libro.html', libro=libro)
+
+
+@auth.route('/reservas', methods=['GET'])
+def reservas():
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT l.id_libro, l.titulo, l.autor, l.sinopsis, l.imagen 
+        FROM libros l 
+        LEFT JOIN reservas r ON l.id_libro = r.id_libro AND r.estado = 'confirmada'
+        WHERE r.id_reserva IS NULL
+    """)
+    libros_disponibles = cursor.fetchall()
+    cursor.close()
+    return render_template('reservas.html', libros=libros_disponibles)
+
+
+# @auth.route('/formulario_reserva/<int:id_libro>', methods=['GET'])
+# @requiere_rol('cliente')
+# def formulario_reserva(id_libro):
+#     cursor = db.cursor(dictionary=True)
+#     cursor.execute("SELECT * FROM libros WHERE id_libro = %s", (id_libro,))
+#     libro = cursor.fetchone()
+#     cursor.close()
+    
+#     #  fecha de vencimiento (7 días después de la reserva)
+#     fecha_reserva = datetime.now().date()
+#     fecha_vencimiento = fecha_reserva + timedelta(days=2)
+
+#     return render_template('formulario_reserva.html', libro=libro, fecha_reserva=fecha_reserva, fecha_vencimiento=fecha_vencimiento)
+
+@auth.route('/formulario_reserva/<int:id_libro>', methods=['GET'])
+def formulario_reserva(id_libro):
+    if 'usuario_id' not in session:
+        flash('Debes iniciar sesión para reservar un libro', 'error')
+        return redirect(url_for('auth.login'))
+
+    id_usuario = session['usuario_id']
+
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM usuarios WHERE id_usuario = %s", (id_usuario,))
+    usuario = cursor.fetchone()
+
+    
+    cursor.execute("SELECT * FROM libros WHERE id_libro = %s", (id_libro,))
+    libro = cursor.fetchone()
+    cursor.close()
+
+    return render_template('formulario_reserva.html', usuario=usuario, libro=libro)
+
+
+@auth.route('/reservar_libro/<int:id_libro>', methods=['POST'])
+@requiere_rol('cliente')
+def reservar_libro(id_libro):
+    if 'usuario_id' not in session:
+        flash('Debes iniciar sesión para reservar un libro', 'error')
+        return redirect(url_for('auth.login'))
+
+    id_usuario = session['usuario_id']
+    fecha_reserva = datetime.now().date()
+    fecha_vencimiento = fecha_reserva + timedelta(days=7)
+
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO reservas (id_usuario, id_libro, fecha_reserva, fecha_vencimiento, estado)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (id_usuario, id_libro, fecha_reserva, fecha_vencimiento, 'pendiente'))
+
+    db.commit()
+    cursor.close()
+    flash('¡Reserva realizada exitosamente!', 'success')
+    return redirect(url_for('auth.mis_reservas'))
+
+
+@auth.route('/mis_reservas', methods=['GET', 'POST'])
+@requiere_rol('cliente')
+def mis_reservas():
+    id_usuario = session.get('usuario_id')
+    
+    
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT r.id_reserva, l.titulo AS titulo_libro, r.fecha_reserva, 
+            r.hora_reserva, r.estado 
+        FROM reservas r
+        INNER JOIN libros l ON r.id_libro = l.id_libro
+        WHERE r.id_usuario = %s
+    """, (id_usuario,))
+    
+    reservas = cursor.fetchall()
+    cursor.close()
+
+    return render_template('mis_reservas.html', reservas=reservas)
+
+
+@auth.route('/guardar_reserva', methods=['POST'])
+def guardar_reserva():
+    if 'usuario_id' not in session:
+        flash('Debes iniciar sesión para reservar un libro', 'error')
+        return redirect(url_for('auth.login'))
+
+    id_usuario = request.form.get('id_usuario')
+    id_libro = request.form.get('id_libro')
+    dia = int(request.form.get('dia'))
+    mes = int(request.form.get('mes'))
+    anio = int(request.form.get('anio'))
+    hora = request.form.get('hora')
+    comentarios = request.form.get('comentarios')
+
+    
+    fecha_reserva = datetime.now().date()
+    fecha_vencimiento = datetime(anio, mes, dia)
+    hora_reserva = datetime.strptime(hora, '%H:%M').time()
+
+    
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO reservas (id_usuario, id_libro, fecha_reserva, fecha_vencimiento, hora_reserva, estado)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (id_usuario, id_libro, fecha_reserva, fecha_vencimiento, hora_reserva, 'pendiente'))
+
+    db.commit()
+    cursor.close()
+
+    flash('¡Reserva realizada exitosamente!', 'success')
+    return redirect(url_for('auth.mis_reservas'))
+
+@auth.route('/actualizar_reserva_cliente/<int:id_reserva>', methods=['POST'])
+@requiere_rol('cliente')
+def actualizar_reserva_cliente(id_reserva):
+    nuevo_estado = request.form.get('estado')
+
+    if nuevo_estado not in ['pendiente', 'cancelada']:
+        flash('No puedes cambiar el estado a esa opción', 'error')
+        return redirect(url_for('auth.mis_reservas'))
+    
+    cursor = db.cursor()
+    cursor.execute("""
+        UPDATE reservas 
+        SET estado = %s 
+        WHERE id_reserva = %s AND estado = 'pendiente'
+    """, (nuevo_estado, id_reserva))
+    
+    db.commit()
+    cursor.close()
+
+    flash('Reserva actualizada exitosamente', 'success')
+    return redirect(url_for('auth.mis_reservas'))
