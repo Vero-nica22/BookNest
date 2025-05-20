@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservas Confirmadas</title>
+</head>
+<body>
+    <h1>Reservas Confirmadas</h1>
+
+    {% if reservas %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reservas %}
+                <tr>
+                    <td>{{ r.nombre }} {{ r.apellido }}</td>
+                    <td>{{ r.libro }}</td>
+                    <td>{{ r.fecha_reserva }}</td>
+                    <td>{{ r.hora_inicio }}</td>
+                    <td>{{ r.hora_fin }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay reservas confirmadas.</p>
+    {% endif %}
+</body>
+</html>

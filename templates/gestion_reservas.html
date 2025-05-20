@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Gestión de Reservas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <h2>Reservas Pendientes</h2>
+
+        {% if reservas %}
+        <table border="1">
+            <tr>
+                <th>ID Reserva</th>
+                <th>Libro</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva['id_reserva'] }}</td>
+                <td>{{ reserva['titulo'] }}</td>
+                <td>{{ reserva['nombre'] }}</td>
+                <td>{{ reserva['fecha_reserva'] }}</td>
+                <td>{{ reserva['hora_inicio'] }}</td>
+                <td>{{ reserva['hora_fin'] }}</td>
+                <td>{{ reserva['estado'] }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
+                        <input type="hidden" name="estado" value="confirmada">
+                        <button type="submit">Confirmar</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
+                        <input type="hidden" name="estado" value="rechazada">
+                        <button type="submit">Rechazar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% else %}
+        <p>No hay reservas pendientes.</p>
+        {% endif %}
+    </div>
+
+
+</body>
+</html>

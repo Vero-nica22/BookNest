@@ -30,23 +30,19 @@
                 <input type="text" id="libro" name="libro" value="{{ libro['titulo'] }}" readonly />
             </div>
 
-            <form method="POST" action="{{ url_for('auth.guardar_reserva') }}">
-                <input type="hidden" name="id_usuario" value="{{ usuario['id_usuario'] }}" />
-                <input type="hidden" name="id_libro" value="{{ libro['id_libro'] }}" />
+            <form method="POST" action="{{ url_for('auth.crear_reserva', id_libro=libro.id_libro) }}">
+                <label>Fecha:</label>
+                <input type="date" name="fecha" required>
 
-                <div class="form-row horario">
-                    <label>Horario</label>
-                    <input type="number" name="dia" placeholder="Día" min="1" max="31" required />
-                    <input type="number" name="mes" placeholder="Mes" min="1" max="12" required />
-                    <input type="number" name="anio" placeholder="Año" min="2023" max="2100" required />
-                    <input type="time" name="hora" placeholder="Hora" required />
-                </div>
+                <label>Hora inicio:</label>
+                <input type="time" name="hora_inicio" required>
 
-                <div class="form-buttons">
-                    <button type="button" onclick="window.history.back();">Cancelar</button>
-                    <button type="submit">Reservar</button>
-                </div>
+                <label>Hora fin:</label>
+                <input type="time" name="hora_fin" required>
+
+                <button type="submit">Reservar</button>
             </form>
+
 
     </div>
 </body>
