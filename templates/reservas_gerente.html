@@ -1,0 +1,69 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Reservas</title>
+</head>
+<body>
+    <h2>Control de Reservas</h2>
+
+    <form method="POST" action="{{ url_for('auth.ver_reservas_gerente') }}">
+        <label for="estado">Estado:</label>
+        <select name="estado">
+            <option value="Todos">Todos</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="completada">Completada</option>
+            <option value="cancelada">Cancelada</option>
+        </select>
+
+        <label for="usuario">Usuario:</label>
+        <input type="text" name="usuario" placeholder="Nombre de usuario">
+
+        <label for="libro">Libro:</label>
+        <input type="text" name="libro" placeholder="Título del libro">
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <hr>
+
+    <table border="1">
+        <tr>
+            <th>ID Reserva</th>
+            <th>Usuario</th>
+            <th>Libro</th>
+            <th>Fecha Reserva</th>
+            <th>Hora Reserva</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva['id_reserva'] }}</td>
+            <td>{{ reserva['nombre_usuario'] }}</td>
+            <td>{{ reserva['titulo_libro'] }}</td>
+            <td>{{ reserva['fecha_reserva'] }}</td>
+            <td>{{ reserva['estado'] }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
+                    <select name="estado">
+                        <option value="pendiente" {% if reserva['estado'] == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="confirmada" {% if reserva['estado'] == 'confirmada' %}selected{% endif %}>Confirmada</option>
+                        <option value="completada" {% if reserva['estado'] == 'completada' %}selected{% endif %}>Completada</option>
+                        <option value="cancelada" {% if reserva['estado'] == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                    </select>
+                    <button type="submit">Actualizar</button>
+                    {% if session['rol'] == 'admin' %}
+                        <form method="POST" action="{{ url_for('eliminar_reserva', id=reserva['id_reserva']) }}" onsubmit="return confirm('¿Seguro que desea eliminar esta reserva?');">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    {% endif %}
+                </form>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html> -->

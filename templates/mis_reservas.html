@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Reservas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h2>Mis Reservas</h2>
+    
+    <table border="1">
+        <tr>
+            <th>ID Reserva</th>
+            <th>Libro</th>
+            <th>Fecha</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva['id_reserva'] }}</td>
+            <td>{{ reserva['titulo_libro'] }}</td>
+            <td>{{ reserva['fecha_reserva'] }}</td>
+            <td>{{ reserva['hora_inicio'] or '-' }}</td>
+            <td>{{ reserva['hora_fin'] or '-' }}</td>
+            <td>{{ reserva['estado'] }}</td>
+            <td>
+                {% if reserva['estado'] != 'cancelada' %}
+                    <form method="POST" action="{{ url_for('auth.actualizar_reserva_cliente', id_reserva=reserva['id_reserva']) }}">
+                        <input type="hidden" name="estado" value="cancelada">
+                        <button type="submit">Cancelar</button>
+                    </form>
+                {% else %}
+                    <span>Cancelada</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

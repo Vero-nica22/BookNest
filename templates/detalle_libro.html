@@ -1,0 +1,30 @@
+<!-- templates/detalle_libro.html -->
+<h1>{{ libro.titulo }}</h1>
+<p><strong>Autor:</strong> {{ libro.autor }}</p>
+<p>{{ libro.sinopsis }}</p>
+{% if libro.imagen %}
+    <img src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" width="200">
+{% endif %}
+
+<h2>Agregar Reseña</h2>
+<form method="POST">
+    <label for="comentario">Comentario:</label>
+    <textarea name="comentario" required></textarea>
+
+    <label for="calificacion">Calificación (1-5):</label>
+    <input type="number" name="calificacion" min="1" max="5" required>
+
+    <button type="submit">Enviar Reseña</button>
+</form>
+
+
+<h2>Reseñas</h2>
+{% for r in resenas %}
+    <div style="border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px;">
+        <p><strong>{{ r.cliente }}</strong> ({{ r.fecha.strftime('%Y-%m-%d') }})</p>
+        <p>Calificación: {{ r.calificacion }} ⭐</p>
+        <p>{{ r.comentario }}</p>
+    </div>
+{% else %}
+    <p>No hay reseñas aún.</p>
+{% endfor %}

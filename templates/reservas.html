@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas de Libros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='reservas.css') }}">
+</head>
+<body>
+    <h2>Libros Disponibles para Reserva</h2>
+    <div>
+        <button type="button" onclick="location.href='/mis_reservas'">Mis reservas</button>
+    </div>
+    
+    <div class="libros">
+        {% for libro in libros %}
+            <div class="libro">
+                {% if libro['imagen'] %}
+                    <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) }}" alt="{{ libro['titulo'] }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/180x240?text=No+Image" alt="{{ libro['titulo'] }}">
+                {% endif %}
+                
+                <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
+                <p>{{ libro['sinopsis'] }}</p>
+                <form method="GET" action="{{ url_for('auth.formulario_reserva', id_libro=libro['id_libro']) }}">
+                    <button type="submit">Reservar</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
