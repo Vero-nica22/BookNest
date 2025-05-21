@@ -13,8 +13,8 @@ auth = Blueprint('auth', __name__)
 
 db = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="1234",
+    user="",
+    password="",
     database="booknest"
 )
 
