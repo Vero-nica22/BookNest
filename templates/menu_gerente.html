@@ -1,14 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Menú del Gerente</title>
-</head>
-<body>
-    <h1>¡Bienvenido, Gerente!</h1>
-    <p>Aquí puedes supervisar el funcionamiento general del sistema.</p>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,12 +8,14 @@
     <header>
         <!-- <div class="menu-cliente">Menú Cliente</div> -->
         <nav>
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            <a href="/menu_gerente">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
             <ul>
-                <li><a href="#">Buscar libros</a></li>
-                <li><a href="#">Productos</a></li>
-                <li><a href="#">Libros</a></li>
-                <li><a href="#">Reservas</a></li>
+                <!-- <li><a href="#">Buscar libros</a></li> -->
+                <li><a href="/libros">Libros</a></li>
+                <li><a href="/gestión_reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.reservas_confirmadas') }}">Reservas Confirmadas</a>
                 </li>

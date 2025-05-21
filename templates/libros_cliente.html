@@ -1,0 +1,13 @@
+<h1>Catálogo de libros</h1>
+<div style="display: flex; flex-wrap: wrap;">
+        {% for libro in libros %}
+    <div class="libro">
+        <h3>{{ libro.titulo }}</h3>
+        {% if libro.imagen %}
+            <img src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" width="100">
+        {% endif %}
+        <p><strong>Autor:</strong> {{ libro.autor }}</p>
+        <a href="{{ url_for('auth.detalle_libro', id_libro=libro.id_libro) }}">Ver detalles y reseñas</a>
+    </div>
+    {% endfor %}
+</div>
