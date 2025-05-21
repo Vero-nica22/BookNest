@@ -30,29 +30,3 @@
     </div>
 </body>
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Reservas de Libros</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <h2>Libros Disponibles para Reserva</h2>
-    
-    <div class="libros">
-        {% for libro in libros %}
-            <div class="libro">
-                <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=No+Image' }}" alt="{{ libro['titulo'] }}">
-                <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
-                <p>{{ libro['sinopsis'] }}</p>
-                <form method="POST" action="{{ url_for('auth.reservar_libro', id_libro=libro['id_libro']) }}">
-                    <button type="submit">Reservar</button>
-                </form>
-            </div>
-        {% endfor %}
-    </div>
-</body>
-</html> -->
