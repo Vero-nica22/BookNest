@@ -18,8 +18,6 @@ BookNest es una aplicación web para la gestión de reservas de libros y product
 - `config.py`: Configuración de la base de datos y llaves secretas.
 - `modules/`: Módulos de rutas y lógica de negocio.
   - `auth.py`: Rutas principales de autenticación y gestión.
-  - `routes.py`: Rutas de menús por rol.
-  - `user.py`: (comentado) Lógica de usuario.
 - `utils.py`: Decoradores y utilidades (por ejemplo, control de acceso por rol).
 - `static/`: Archivos estáticos (CSS, imágenes).
 - `templates/`: Plantillas HTML para las vistas.
@@ -39,7 +37,7 @@ BookNest es una aplicación web para la gestión de reservas de libros y product
 
 ## Uso
 
-- Accede a `http://localhost:5000` en tu navegador.
+- Accede a `http://localhost:5000/login` en tu navegador.
 - Regístrate como usuario o inicia sesión con un usuario existente.
 - Navega según el rol asignado (cliente, administrador, gerente).
 
