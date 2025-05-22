@@ -1,10 +1,34 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Menú del Administrador</title>
+    <title>BookNest</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='indexstyle.css') }}">
 </head>
 <body>
-    <h1>¡Bienvenido, Administrador!</h1>
-    <p>Aquí puedes gestionar usuarios, libros y reservas.</p>
+    <header>
+        
+        <nav>
+            <a href="/menu_administrador">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <!-- <li><a href="#">Buscar libros</a></li> -->
+                <li><a href="/libros">Libros</a></li>
+                <li><a href="/gestion_reservas">Reservas</a></li>
+                <li><a href="/productos">Productos</a></li>
+                <li><a href="/estadisticas">Ver estadísticas</a></li>
+            </ul>
+            <button class="cerrar-sesion">Cerrar sesión</button>
+        </nav>
+    </header>
+    <main>
+        <div class="bienvenida">
+            <h1>¡Bienvenido a BookNest!</h1>
+        </div>
+        <div class="imagen-principal">
+            <img src="{{ url_for('static', filename='imagen-principal.jpg') }}" alt="Imagen Principal">
+        </div>
+    </main>
 </body>
 </html>

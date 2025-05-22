@@ -5,3 +5,4 @@ DB_CONFIG = {
     'password': '22',
     'database': 'booknest'
 }
+UPLOAD_FOLDER = 'static/uploads'

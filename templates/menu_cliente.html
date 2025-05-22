@@ -19,12 +19,14 @@
     <header>
         <!-- <div class="menu-cliente">Menú Cliente</div> -->
         <nav>
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            <a href="/menu_cliente">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
             <ul>
-                <li><a href="#">Buscar libros</a></li>
+                <li><a href="/libros_cliente">Libros</a></li>
+                <li><a href="/reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
                 <li><a href="#">Mis libros</a></li>
-                <li><a href="#">Reservas</a></li>
-                <li><a href="#">Productos</a></li>
             </ul>
             <button class="cerrar-sesion">Cerrar sesión</button>
         </nav>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estadísticas del Administrador</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 400px;
+            height: 250px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>📊 Estadísticas del Administrador</h1>
+
+
+        <h2>Libros más reservados</h2>
+        <canvas id="librosChart"></canvas>
+
+
+        <h2>Estado de las reservas</h2>
+        <canvas id="estadoChart"></canvas>
+
+
+        <h2>Reservas por mes</h2>
+        <canvas id="mesChart"></canvas>
+    </div>
+
+    <script>
+        const librosData = {
+            labels: {{ libros_reservados | map(attribute='titulo') | list | tojson | safe }},
+            datasets: [{
+                label: 'Reservas',
+                data: {{ libros_reservados | map(attribute='total_reservas') | list | tojson | safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+            }]
+        };
+
+        new Chart(document.getElementById('librosChart'), {
+            type: 'bar',
+            data: librosData,
+        });
+
+        const estadoData = {
+            labels: {{ estados_reservas | map(attribute='estado') | list | tojson | safe }},
+            datasets: [{
+                label: 'Cantidad',
+                data: {{ estados_reservas | map(attribute='total') | list | tojson | safe }},
+                backgroundColor: ['#f39c12', '#27ae60', '#e74c3c']
+            }]
+        };
+
+        new Chart(document.getElementById('estadoChart'), {
+            type: 'pie',
+            data: estadoData,
+        });
+
+        const mesData = {
+            labels: {{ reservas_por_mes | map(attribute='mes') | list | tojson | safe }},
+            datasets: [{
+                label: 'Reservas',
+                data: {{ reservas_por_mes | map(attribute='total') | list | tojson | safe }},
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.3
+            }]
+        };
+
+        new Chart(document.getElementById('mesChart'), {
+            type: 'line',
+            data: mesData,
+        });
+    </script>
+</body>
+</html>

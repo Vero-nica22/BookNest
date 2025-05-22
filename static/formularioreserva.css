@@ -1,0 +1,90 @@
+body {
+    background-color: #f8e7d1;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #e7c9b6;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 360px;
+}
+
+.reserva-form h2 {
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: #7e6b58;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    flex: 1;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #7e6b58;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 8px 12px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background-color: #f2ded4;
+    color: #7e6b58;
+}
+
+.form-group textarea {
+    resize: none;
+}
+
+.horario input {
+    flex: 1;
+    text-align: center;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+button {
+    background-color: #d7a98c;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 25px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="button"] {
+    background-color: #e1c1aa;
+}
+
+button:hover {
+    background-color: #bf8464;
+}
+
+button[type="button"]:hover {
+    background-color: #caa989;
+}

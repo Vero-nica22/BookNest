@@ -1,130 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Catálogo de Libros - Administrador</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f8f0e3;
-    }
-
-    header {
-      background-color: #fef3dc;
-      padding: 10px 20px;
-    }
-
-    .top-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .top-header img {
-      height: 95px;
-    }
-
-    .top-header p {
-      margin: 0;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      padding: 0;
-      margin-top: 10px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .banner img {
-      width: 100%;
-      height: auto;
-      max-height: 500px;
-      object-fit: cover;
-    }
-
-    main {
-      padding: 30px;
-      text-align: center;
-    }
-
-    .libros {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-top: 20px;
-    }
-
-    .libro {
-      position: relative;
-      width: 180px;
-      text-align: left;
-    }
-
-    .libro img {
-      width: 100%;
-      height: auto;
-      border-radius: 5px;
-    }
-
-    .iconos {
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 5px;
-      z-index: 2;
-    }
-
-    .iconos button {
-      background-color: rgba(255, 255, 255, 0.95);
-      border: none;
-      border-radius: 6px;
-      padding: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      transition: background-color 0.2s;
-    }
-
-    .iconos button:hover {
-      background-color: #e0d3bb;
-    }
-
-    button.agregar {
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #d4b48a;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    h2 {
-      color: #3e3e3e;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Libros</title>
+    <link rel="stylesheet" href="../static/librosadmstyle.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
 
-  <header>
+<body>
+    <header>
     <div class="top-header">
       <img src="Logobooknest.png" alt="Logo">
-      <!--<p><strong>Libros Administrador</strong></p>-->
+      
     </div>
     <nav>
       <ul>
@@ -139,65 +27,135 @@
   <section class="banner">
     <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
   </section>
-
-  <main>
-    <h2>Catálogo de Libros</h2>
-    <div class="libros">
-
-      <div class="libro">
-        <div class="iconos">
-          <button>✏</button>
-          <button>🗑</button>
+    <main>
+        <h2>Catálogo de Libros</h2>
+        <div>
+            <button type="button" onclick="location.href='/libros_cliente'">Ver reseñas de libros</button>
         </div>
-        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/8a/9e/8a9ed4b676d987ffb8f1cece4aa5ad2a.jpg" alt="Bajo la Misma Estrella">
-        <p><strong>Bajo la Misma Estrella</strong><br>John Green</p>
-        <p>Hazel tiene dieciséis años, está enferma de cáncer desde pequeña y sobrevive gracias a un milagro médico que la mantiene con vida.</p>
-      </div>
 
-      <div class="libro">
-        <div class="iconos">
-          <button>✏</button>
-          <button>🗑</button>
+
+        <button id="mostrar-formulario-agregar" class="agregar">Agregar Nuevos Libros</button>
+
+
+        <form id="form-agregar-libro" method="POST" action="{{ url_for('auth.libros') }}" enctype="multipart/form-data">
+            <h3>Agregar Nuevo Libro</h3>
+            <label for="titulo">Título</label>
+            <input type="text" name="titulo" id="titulo" required>
+            <label for="autor">Autor</label>
+            <input type="text" name="autor" id="autor" required>
+            <label for="sinopsis">Sinopsis</label>
+            <textarea name="sinopsis" id="sinopsis" rows="3" required></textarea>
+            <label for="imagen">Imagen (jpg, png, gif)</label>
+            <input type="file" name="imagen" id="imagen" accept=".png,.jpg,.jpeg,.gif">
+            <button class="agregar" type="submit">Agregar Libro</button>
+        </form>
+
+        <div class="libros">
+            {% for libro in libros %}
+            <div class="libro">
+                <div class="iconos">
+                    <button type="button" 
+                            data-id="{{ libro['id_libro'] }}" 
+                            data-titulo="{{ libro['titulo'] }}"
+                            data-autor="{{ libro['autor'] }}" 
+                            data-sinopsis="{{ libro['sinopsis'] }}"
+                            data-imagen="{{ libro['imagen'] }}"
+                            onclick="openModal(this)">
+                        Editar
+                    </button>
+                    <form method="POST" action="{{ url_for('auth.eliminar_libro', id=libro['id_libro']) }}"
+                        onsubmit="return confirm('¿Seguro que quieres eliminar este libro?');">
+                        <button type="submit">🗑</button>
+                    </form>
+                </div>
+                <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=No+Image' }}"
+                    alt="{{ libro['titulo'] }}">
+                <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
+                <p>{{ libro['sinopsis'] }}</p>
+            </div>
+            {% endfor %}
         </div>
-        <img src="https://libreriasiglo.com/91502-large_360/romeo-y-julieta.webp" alt="Romeo y Julieta">
-        <p><strong>Romeo y Julieta</strong><br>William Shakespeare</p>
-        <p>Dos jóvenes enamorados de familias enemigas viven una historia trágica llena de amor y destino.</p>
-      </div>
+    </main>
 
-      <div class="libro">
-        <div class="iconos">
-          <button>✏</button>
-          <button>🗑</button>
-        </div>
-        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/6a/ca/6acabcfa8d03abc2b853155997d4b21d.jpg" alt="El Diario de Ana Frank">
-        <p><strong>El Diario de Ana Frank</strong><br>Ana Frank</p>
-        <p>Esta historia narra el diario de vida de una niña judía que se escondió de los nazis durante la Segunda Guerra Mundial.</p>
-      </div>
-
-      <div class="libro">
-        <div class="iconos">
-          <button>✏</button>
-          <button>🗑</button>
-        </div>
-        <img src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg" alt="Harry Potter">
-        <p><strong>Harry Potter y la Piedra Filosofal</strong><br>J.K. Rowling</p>
-        <p>Harry descubre que es un mago y asiste a la escuela Hogwarts, donde vive sus primeras aventuras mágicas.</p>
-      </div>
-
-      <div class="libro">
-        <div class="iconos">
-          <button>✏</button>
-          <button>🗑</button>
-        </div>
-        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567.RS360x360.jpg" alt="El Principito">
-        <p><strong>El Principito</strong><br>Antoine de Saint-Exupéry</p>
-        <p>Un pequeño príncipe viaja por el universo aprendiendo sobre la vida, el amor y la soledad a través de distintas experiencias.</p>
-      </div>
-
+    <div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Editar Libro</h3>
+        <img id="imagen-actual" src="" alt="Imagen Actual" style="max-width: 150px; margin-bottom: 10px;">
+        
+        <form id="form-editar-libro" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="editar-id">
+            
+            <label for="editar-titulo">Título</label>
+            <input type="text" name="titulo" id="editar-titulo" required>
+            
+            <label for="editar-autor">Autor</label>
+            <input type="text" name="autor" id="editar-autor" required>
+            
+            <label for="editar-sinopsis">Sinopsis</label>
+            <textarea name="sinopsis" id="editar-sinopsis" rows="3" required></textarea>
+            
+            <label for="editar-imagen">Cambiar Imagen (opcional)</label>
+            <input type="file" name="imagen" id="editar-imagen" accept=".png,.jpg,.jpeg,.gif">
+            
+            <button type="submit">Guardar Cambios</button>
+        </form>
     </div>
+</div>
 
-    <button class="agregar">Agregar Nuevos Libros</button>
-  </main>
+    <script>
+    const formEditar = document.getElementById('form-editar-libro');
+
+    function openModal(button) {
+        const id_libro = button.getAttribute("data-id");
+        const titulo = button.getAttribute("data-titulo");
+        const autor = button.getAttribute("data-autor");
+        const sinopsis = button.getAttribute("data-sinopsis");
+
+        document.getElementById('editar-id').value = id_libro;
+        document.getElementById('editar-titulo').value = titulo;
+        document.getElementById('editar-autor').value = autor;
+        document.getElementById('editar-sinopsis').value = sinopsis;
+
+        const imgActual = document.getElementById('imagen-actual');
+        if (imagen) {
+            imgActual.src = `/static/uploads/${imagen}`;
+        } else {
+            imgActual.src = 'https://via.placeholder.com/150x200?text=Sin+Imagen';
+        }
+
+
+        formEditar.action = `/actualizar_libro/${id_libro}`;
+        const modal = document.getElementById('modalEditar');
+        modal.style.display = 'block';
+    }
+
+
+    function closeModal() {
+        const modal = document.getElementById('modalEditar');
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalEditar');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    const botonMostrarAgregar = document.getElementById('mostrar-formulario-agregar');
+    const formularioAgregarLibro = document.getElementById('form-agregar-libro');
+
+    botonMostrarAgregar.addEventListener('click', function() {
+        if (formularioAgregarLibro.style.display === 'none') {
+            formularioAgregarLibro.style.display = 'block';
+            botonMostrarAgregar.textContent = 'Ocultar Formulario';
+        } else {
+            formularioAgregarLibro.style.display = 'none';
+            botonMostrarAgregar.textContent = 'Agregar Nuevos Libros';
+        }
+    });
+    </script>
 
 </body>
 </html>
