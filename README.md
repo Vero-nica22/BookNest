@@ -48,3 +48,5 @@ Asegúrate de tener las tablas necesarias: `usuarios`, `roles`, `libros`, `produ
 ---
 
 **Nota:** Este proyecto utiliza Flask, MySQL y HTML/CSS/JS para la interfaz.
+
+## Muchas gracias
