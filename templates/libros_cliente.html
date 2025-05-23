@@ -1,4 +1,4 @@
-<h1>Catálogo de libros</h1>
+<!--<h1>Catálogo de libros</h1>
 <div style="display: flex; flex-wrap: wrap;">
         {% for libro in libros %}
     <div class="libro">
@@ -10,4 +10,55 @@
         <a href="{{ url_for('auth.detalle_libro', id_libro=libro.id_libro) }}">Ver detalles y reseñas</a>
     </div>
     {% endfor %}
-</div>
+</div>-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Catálogo de libros</title>
+    <link rel="stylesheet" href="../static/libros_cliente.css">
+</head>
+<body>
+
+  <!-- Encabezado con logo y navegación -->
+  <header>
+    <div class="logo">
+      <img src="Logobooknest.png" alt="Logo">
+    </div>
+    <nav>
+      <a href="#">Buscar libros</a>
+      <a href="#">Mis libros</a>
+      <a href="#">Reservas</a>
+      <a href="#">Productos</a>
+      <a href="#"><img src="logout.png" alt="Cerrar sesión" class="logout-icon"> Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="titulo-productos">Catálogo de libros</h1>
+    <hr>
+
+    <div class="productos">
+      {% for libro in libros %}
+      <div class="producto">
+        {% if libro.imagen %}
+          <img src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" alt="{{ libro.titulo }}">
+        {% else %}
+          <img src="default-libro.png" alt="Sin imagen">
+        {% endif %}
+        <h3>{{ libro.titulo }}</h3>
+        <p><strong>Autor:</strong> {{ libro.autor }}</p>
+        <div class="acciones-producto">
+          <a href="{{ url_for('auth.detalle_libro', id_libro=libro.id_libro) }}">
+            <button>Ver detalles</button>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+
+</body>
+</html>
