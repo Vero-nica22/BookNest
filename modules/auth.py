@@ -147,26 +147,74 @@ def eliminar_producto(id_producto):
 @auth.route('/actualizar_producto/<int:id>', methods=['GET', 'POST'])
 @requiere_rol('administrador')
 def actualizar_producto(id):
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(dictionary=True) 
 
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        descripcion = request.form['descripcion']
-        imagen_url = request.form['imagen_url']
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        
 
-        cursor.execute("""
-            UPDATE productos
-            SET nombre = %s, descripcion = %s, imagen_url = %s
-            WHERE id_producto = %s
-        """, (nombre, descripcion, imagen_url, id))
-        db.commit()
-        flash('Producto actualizado con éxito', 'success')
+        cursor.execute("SELECT imagen_nombre FROM productos WHERE id_producto = %s", (id,))
+        producto_existente = cursor.fetchone()
+        
+        if not producto_existente:
+            flash('Producto no encontrado.', 'danger')
+            cursor.close() 
+            return redirect(url_for('auth.productos'))
+
+        current_imagen_nombre = producto_existente['imagen_nombre'] 
+
+        imagen = request.files.get('imagen') 
+
+        filename_to_save = current_imagen_nombre 
+
+        if imagen and imagen.filename != '': 
+            if allowed_file(imagen.filename):
+                if current_imagen_nombre and current_imagen_nombre != 'default.png': 
+                    old_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_imagen_nombre)
+                    if os.path.exists(old_image_path):
+                        os.remove(old_image_path)
+                
+                filename_to_save = secure_filename(imagen.filename)
+                imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename_to_save)
+                imagen.save(imagen_path)
+            else:
+                flash('Tipo de archivo de imagen no permitido.', 'danger')
+                cursor.close() 
+                return redirect(url_for('auth.productos'))
+        
+        try:
+            cursor.execute("""
+                UPDATE productos
+                SET nombre = %s, descripcion = %s, imagen_nombre = %s
+                WHERE id_producto = %s
+            """, (nombre, descripcion, filename_to_save, id)) 
+            db.commit() 
+            flash('Producto actualizado con éxito', 'success')
+        except Exception as e:
+            db.rollback() 
+            flash(f'Error al actualizar el producto: {e}', 'danger')
+        finally:
+            cursor.close() 
+            
         return redirect(url_for('auth.productos'))
 
-    cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
-    producto = cursor.fetchone()
-    cursor.close()
+    try:
+        cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
+        producto = cursor.fetchone()
+    except Exception as e:
+        flash(f'Error al cargar el producto: {e}', 'danger')
+        producto = None 
+    finally:
+        cursor.close() 
+
     return render_template('actualizar_producto.html', producto=producto)
+
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @auth.route('/ver_productos', methods=['GET'])
 @requiere_rol('cliente', 'gerente') 

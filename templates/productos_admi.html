@@ -13,7 +13,6 @@
         <nav>
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
             <ul>
-                <!-- <li><a href="#">Buscar libros</a></li> -->
                 <li><a href="/libros">Libros</a></li>
                 <li><a href="/gestion_reservas">Reservas</a></li>
                 <li><a href="/productos">Productos</a></li>
@@ -22,37 +21,37 @@
             <button class="cerrar-sesion">Cerrar sesión</button>
         </nav>
     </header>
+
     <button class="floating-button" id="openModal">+</button>
 
-<div class="modal" id="productModal">
-    <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>Agregar Producto</h2>
-        <form action="/productos" method="POST" enctype="multipart/form-data">
-            <input type="text" name="nombre" id="nombre" placeholder="Nombre del producto" required>
-            <textarea name="descripcion" id="descripcion" placeholder="Descripción del producto" required></textarea>
-            <label for="file-upload" class="custom-file-upload">
-                Seleccionar Imagen
-            </label>
-            <input type="file" id="file-upload" name="imagen" accept="image/*">
-            <button type="submit">Agregar Producto</button>
-        </form>
-
-
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Agregar Producto</h2>
+            <form action="/productos" method="POST" enctype="multipart/form-data">
+                <input type="text" name="nombre" id="nombre" placeholder="Nombre del producto" required>
+                <textarea name="descripcion" id="descripcion" placeholder="Descripción del producto" required></textarea>
+                <label for="file-upload" class="custom-file-upload">Seleccionar Imagen</label>
+                <input type="file" id="file-upload" name="imagen" accept="image/*">
+                <button type="submit">Agregar Producto</button>
+            </form>
+        </div>
     </div>
-</div>
-<div class="modal" id="editModal">
-    <div class="modal-content">
-        <span class="close" id="closeEditModal">&times;</span>
-        <h2>Editar Producto</h2>
-        <form id="editForm" method="POST">
-            <input type="text" name="nombre" id="editNombre" required>
-            <textarea name="descripcion" id="editDescripcion" required></textarea>
-            <input type="text" name="imagen_url" id="editImagen">
-            <button type="submit">Actualizar Producto</button>
-        </form>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <span class="close" id="closeEditModal">&times;</span>
+            <h2>Editar Producto</h2>
+            <form id="editForm" method="POST" enctype="multipart/form-data">
+                <input type="text" name="nombre" id="editNombre" required>
+                <textarea name="descripcion" id="editDescripcion" required></textarea>
+                <label for="editImagen" class="custom-file-upload">Cambiar Imagen</label>
+                <input type="file" name="imagen" id="editImagen" accept="image/*"> 
+                <button type="submit">Actualizar Producto</button>
+            </form>
+        </div>
     </div>
-</div>
+
     <main>
         <h1>Productos</h1>
 
@@ -63,20 +62,22 @@
                 </div>
             {% endif %}
         {% endwith %}
+
         <section class="products">
             {% for producto in productos %}
             <div class="product">
                 <h2>{{ producto.nombre }}</h2>
-                <!-- <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" width="200px"> -->
-                <img src="{{ url_for('static', filename='uploads/' + producto.imagen_nombre) }}" alt="{{ producto.nombre }}" width="200px">
+                {% if producto.imagen_nombre %}
+                    <img src="{{ url_for('static', filename='uploads/' + producto.imagen_nombre) }}" alt="{{ producto.nombre }}" width="200px">
+                {% else %}
+                    <img src="{{ url_for('static', filename='default.png') }}" alt="{{ producto.nombre }}" width="200px">
+                {% endif %}
                 <p>{{ producto.descripcion }}</p>
-                
                 <div class="botones-container">
                     <button class="edit-button"
                         data-id="{{ producto.id_producto }}"
                         data-nombre="{{ producto.nombre }}"
-                        data-descripcion="{{ producto.descripcion }}"
-                        data-imagen="{{ producto.imagen_url }}">
+                        data-descripcion="{{ producto.descripcion }}">
                         Editar
                     </button>
                     <form class="delete-form" data-id="{{ producto.id_producto }}">
@@ -87,101 +88,95 @@
             {% endfor %}
         </section>
     </main>
+
     <script>
         document.getElementById("openModal").addEventListener("click", function() {
             document.getElementById("productModal").style.display = "block";
         });
-    
+
         document.getElementById("closeModal").addEventListener("click", function() {
             document.getElementById("productModal").style.display = "none";
         });
-    
+
         window.addEventListener("click", function(event) {
             var modal = document.getElementById("productModal");
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         });
-    </script>
-    <script>
-        
+
         window.addEventListener('DOMContentLoaded', function() {
             var alert = document.querySelector('.alert');
             if (alert) {
                 setTimeout(function() {
                     alert.style.display = 'none';
-                }, 3000); 
+                }, 3000);
             }
         });
-    </script>
-    <script>
+
         document.querySelectorAll('.edit-button').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.dataset.id;
                 const nombre = this.dataset.nombre;
                 const descripcion = this.dataset.descripcion;
-                const imagen = this.dataset.imagen;
-    
-                
+
                 document.getElementById('editNombre').value = nombre;
                 document.getElementById('editDescripcion').value = descripcion;
-                document.getElementById('editImagen').value = imagen;
-    
+
                 const form = document.getElementById('editForm');
                 form.action = `/actualizar_producto/${id}`;
-    
-                
+
+
+                document.getElementById('editImagen').value = ''; // <--- AÑADIR ESTA LÍNEA
+
                 document.getElementById('editModal').style.display = 'block';
             });
         });
-    
 
         document.getElementById("closeEditModal").addEventListener("click", function() {
             document.getElementById("editModal").style.display = "none";
         });
-    </script>
-    
-</body>
-</html>
-<script>
-    document.querySelectorAll('.delete-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); 
 
-            Swal.fire({
-                title: '¿Quieres eliminar el producto?',
-                text: "¡No puedes revertir esta acción!",
-                icon: 'warning',
-                background: '#fff8e7',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#d4a373',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-                
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const id = form.getAttribute('data-id');
-                    const tempForm = document.createElement('form');
-                    tempForm.action = `/eliminar_producto/${id}`;
-                    tempForm.method = 'POST';
-                    document.body.appendChild(tempForm);
-                    tempForm.submit();
-                }
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Quieres eliminar el producto?',
+                    text: "¡No puedes revertir esta acción!",
+                    icon: 'warning',
+                    background: '#fff8e7',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#d4a373',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const id = form.getAttribute('data-id');
+                        const tempForm = document.createElement('form');
+                        tempForm.action = `/eliminar_producto/${id}`;
+                        tempForm.method = 'POST';
+                        document.body.appendChild(tempForm);
+                        tempForm.submit();
+                    }
+                });
             });
         });
-    });
-</script>
 
-<script>
-    document.getElementById("file-upload").addEventListener("change", function() {
-        localStorage.setItem("nombreProducto", document.getElementById("nombre").value);
-        localStorage.setItem("descripcionProducto", document.getElementById("descripcion").value);
-    });
+        document.getElementById("file-upload").addEventListener("change", function() {
+            localStorage.setItem("nombreProducto", document.getElementById("nombre").value);
+            localStorage.setItem("descripcionProducto", document.getElementById("descripcion").value);
+        });
 
-    window.addEventListener("load", function() {
-        document.getElementById("nombre").value = localStorage.getItem("nombreProducto") || "";
-        document.getElementById("descripcion").value = localStorage.getItem("descripcionProducto") || "";
-    });
-</script>
+        window.addEventListener("load", function() {
+            document.getElementById("nombre").value = localStorage.getItem("nombreProducto") || "";
+            document.getElementById("descripcion").value = localStorage.getItem("descripcionProducto") || "";
+        });
 
+        document.getElementById("editImagen").addEventListener("click", function() {
+            this.value = null; 
+        });
+
+    </script>
+</body>
+</html>
