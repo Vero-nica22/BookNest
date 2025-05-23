@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -116,7 +116,7 @@
   <header>
     <div class="top-header">
       <img src="Logobooknest.png" alt="Logo">
-      <!--<p><strong>Libros</strong></p>-->
+      <p><strong>Libros</strong></p>
     </div>
     <nav>
       <ul>
@@ -175,6 +175,171 @@
 
     <button class="ver-mas">Ver más Libros</button>
   </main>
+
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Libros - Gerente</title>
+    <!--<link rel="stylesheet" href="../static/librosadmstyle.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">-->
+    <link rel="stylesheet" href="../static/libros_gerente.css">
+</head>
+
+<body>
+    <header>
+    <div class="top-header">
+      <img src="Logobooknest.png" alt="Logo">
+      
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Buscar Libros</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Libros</a></li>
+        <li><a href="#">Reservas</a></li>
+        <a href="#"><img src="logout.png" alt="Cerrar sesión" class="logout-icon"> Cerrar sesión</a>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
+  </section>
+    <main>
+        <h2>Catálogo de Libros</h2>
+        <div>
+            <button type="button" onclick="location.href='/libros_cliente'">Ver reseñas de libros</button>
+        </div>
+
+
+        <button id="mostrar-formulario-agregar" class="agregar">Agregar Nuevos Libros</button>
+
+
+        <form id="form-agregar-libro" method="POST" action="{{ url_for('auth.libros') }}" enctype="multipart/form-data">
+            <h3>Agregar Nuevo Libro</h3>
+            <label for="titulo">Título</label>
+            <input type="text" name="titulo" id="titulo" required>
+            <label for="autor">Autor</label>
+            <input type="text" name="autor" id="autor" required>
+            <label for="sinopsis">Sinopsis</label>
+            <textarea name="sinopsis" id="sinopsis" rows="3" required></textarea>
+            <label for="imagen">Imagen (jpg, png, gif)</label>
+            <input type="file" name="imagen" id="imagen" accept=".png,.jpg,.jpeg,.gif">
+            <button class="agregar" type="submit">Agregar Libro</button>
+        </form>
+
+        <div class="libros">
+            {% for libro in libros %}
+            <div class="libro">
+                <div class="iconos">
+                    <button type="button" 
+                            data-id="{{ libro['id_libro'] }}" 
+                            data-titulo="{{ libro['titulo'] }}"
+                            data-autor="{{ libro['autor'] }}" 
+                            data-sinopsis="{{ libro['sinopsis'] }}"
+                            data-imagen="{{ libro['imagen'] }}"
+                            onclick="openModal(this)">
+                        Editar
+                    </button>
+                    <form method="POST" action="{{ url_for('auth.eliminar_libro', id=libro['id_libro']) }}"
+                        onsubmit="return confirm('¿Seguro que quieres eliminar este libro?');">
+                        <button type="submit">🗑</button>
+                    </form>
+                </div>
+                <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=No+Image' }}"
+                    alt="{{ libro['titulo'] }}"> 
+                <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
+                <p>{{ libro['sinopsis'] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Editar Libro</h3>
+        <img id="imagen-actual" src="" alt="Imagen Actual" style="max-width: 150px; margin-bottom: 10px;">
+        
+        <form id="form-editar-libro" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="editar-id">
+            
+            <label for="editar-titulo">Título</label>
+            <input type="text" name="titulo" id="editar-titulo" required>
+            
+            <label for="editar-autor">Autor</label>
+            <input type="text" name="autor" id="editar-autor" required>
+            
+            <label for="editar-sinopsis">Sinopsis</label>
+            <textarea name="sinopsis" id="editar-sinopsis" rows="3" required></textarea>
+            
+            <label for="editar-imagen">Cambiar Imagen (opcional)</label>
+            <input type="file" name="imagen" id="editar-imagen" accept=".png,.jpg,.jpeg,.gif">
+            
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
+    <script>
+    const formEditar = document.getElementById('form-editar-libro');
+
+    function openModal(button) {
+        const id_libro = button.getAttribute("data-id");
+        const titulo = button.getAttribute("data-titulo");
+        const autor = button.getAttribute("data-autor");
+        const sinopsis = button.getAttribute("data-sinopsis");
+
+        document.getElementById('editar-id').value = id_libro;
+        document.getElementById('editar-titulo').value = titulo;
+        document.getElementById('editar-autor').value = autor;
+        document.getElementById('editar-sinopsis').value = sinopsis;
+
+        const imgActual = document.getElementById('imagen-actual');
+        if (imagen) {
+            imgActual.src = `/static/uploads/${imagen}`;
+        } else {
+            imgActual.src = 'https://via.placeholder.com/150x200?text=Sin+Imagen';
+        }
+
+
+        formEditar.action = `/actualizar_libro/${id_libro}`;
+        const modal = document.getElementById('modalEditar');
+        modal.style.display = 'block';
+    }
+
+
+    function closeModal() {
+        const modal = document.getElementById('modalEditar');
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalEditar');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    const botonMostrarAgregar = document.getElementById('mostrar-formulario-agregar');
+    const formularioAgregarLibro = document.getElementById('form-agregar-libro');
+
+    botonMostrarAgregar.addEventListener('click', function() {
+        if (formularioAgregarLibro.style.display === 'none') {
+            formularioAgregarLibro.style.display = 'block';
+            botonMostrarAgregar.textContent = 'Ocultar Formulario';
+        } else {
+            formularioAgregarLibro.style.display = 'none';
+            botonMostrarAgregar.textContent = 'Agregar Nuevos Libros';
+        }
+    });
+    </script>
 
 </body>
 </html>

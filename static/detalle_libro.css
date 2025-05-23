@@ -1,0 +1,199 @@
+/*body {
+    background-color: #f8e7d1;
+    font-family: 'Georgia', serif;
+    color: #5a4637;
+    padding: 40px;
+    line-height: 1.6;
+}
+
+h1, h2 {
+    color: #7e5e44;
+}
+
+img {
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.reseña-form {
+    background-color: #f4d8c6;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.reseña-form textarea,
+.reseña-form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 15px;
+    background-color: #fff8f0;
+    font-family: inherit;
+}
+
+.reseña-form button {
+    background-color: #d7a98c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.reseña-form button:hover {
+    background-color: #b98263;
+}
+
+.reseña {
+    border-top: 1px solid #b89b85;
+    margin-top: 15px;
+    padding-top: 10px;
+}
+
+.estrellas {
+    font-size: 18px;
+    color: #d3a152;
+}
+
+.estrella {
+    margin-right: 2px;
+}
+
+.estrella.llena {
+    color: #f4b400; /* dorado */
+/*}*/
+
+/*
+.estrella.vacia {
+    color: #ccc;
+}
+*/
+
+body {
+    background-color: #f3e3cb;
+    font-family: 'Georgia', serif;
+    color: #5c4a2e;
+    margin: 0;
+    padding: 0 0 40px 0;
+}
+
+.libro-detalle {
+    margin: 30px auto 0 auto;
+    width: 95%;
+    max-width: 700px;
+}
+
+.libro-detalle h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+}
+
+.libro-detalle p {
+    margin: 0.5em 0;
+}
+
+.libro-imagen {
+    display: block;
+    margin: 20px 0 30px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 180px;
+    height: auto;
+}
+
+.resena-formulario {
+    background: #f7ecd8;
+    padding: 18px 20px;
+    border-radius: 10px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    width: 100%;
+    max-width: 500px;
+}
+
+.resena-formulario h2 {
+    margin-top: 0;
+}
+
+.resena-formulario label {
+    margin-right: 8px;
+}
+
+.resena-formulario input[type="text"],
+.resena-formulario textarea,
+.resena-formulario input[type="number"] {
+    border-radius: 7px;
+    border: 1px solid #e0cfc0;
+    padding: 6px 10px;
+    font-size: 15px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+
+.resena-formulario textarea {
+    width: 100%;
+    min-height: 50px;
+    resize: vertical;
+}
+
+.resena-formulario button {
+    background: #d7a98c;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.resena-formulario button:hover {
+    background: #bf8464;
+}
+
+.resenas-lista {
+    margin-top: 25px;
+    max-width: 700px;
+}
+
+.resena {
+    border-top: 1px solid #e0cfc0;
+    margin-top: 12px;
+    padding-top: 12px;
+}
+
+.resena-header {
+    margin: 0 0 4px 0;
+}
+
+.resena-fecha {
+    color: #9b8c7a;
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.estrellas {
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.estrella {
+    color: #ffc107;
+}
+
+.estrella.vacia {
+    color: #e0cfc0;
+}
+
+.sinopsis {
+    font-style: italic;
+    color: #7e6b58;
+}
+
