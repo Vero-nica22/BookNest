@@ -13,8 +13,8 @@ auth = Blueprint('auth', __name__)
 
 db = mysql.connector.connect(
     host="localhost",
-    user="",
-    password="",
+    user="root",
+    password="1234",
     database="booknest"
 )
 
@@ -543,42 +543,6 @@ def actualizar_reserva_cliente(id_reserva):
     return redirect(url_for('auth.mis_reservas')) 
 
 
-# @auth.route('/ver_reservas_gerente', methods=['GET', 'POST'])
-# # @requiere_rol('gerente')
-# def ver_reservas_gerente():
-#     estado_filtro = request.form.get('estado')
-#     usuario_filtro = request.form.get('usuario')
-#     libro_filtro = request.form.get('libro')
-
-#     query = """
-#         SELECT r.id_reserva, u.nombre AS nombre_usuario, l.titulo AS titulo_libro, 
-#                r.fecha_reserva, r.estado 
-#         FROM reservas r
-#         INNER JOIN usuarios u ON r.id_usuario = u.id_usuario
-#         INNER JOIN libros l ON r.id_libro = l.id_libro
-#         WHERE 1=1
-#     """
-#     params = []
-
-#     if estado_filtro and estado_filtro != "Todos":
-#         query += " AND r.estado = %s"
-#         params.append(estado_filtro)
-
-#     if usuario_filtro:
-#         query += " AND u.nombre LIKE %s"
-#         params.append(f"%{usuario_filtro}%")
-
-#     if libro_filtro:
-#         query += " AND l.titulo LIKE %s"
-#         params.append(f"%{libro_filtro}%")
-
-#     cursor = db.cursor(dictionary=True)
-#     cursor.execute(query, params)
-#     reservas = cursor.fetchall()
-#     cursor.close()
-
-#     return render_template('reservas_gerente.html', reservas=reservas)
-
 @auth.route('/gestion_reservas', methods=['GET', 'POST'])
 @requiere_rol('gerente', 'administrador')
 def gestion_reservas():
@@ -686,7 +650,7 @@ def estadisticas():
 @auth.route('/eliminar_reserva/<int:id>', methods=['POST'])
 def eliminar_reserva(id):
     if session.get('rol') != 'admin':
-        abort(403)  # Prohibido
+        abort(403)  
     
     reserva = Reserva.query.get_or_404(id)
     db.session.delete(reserva)
