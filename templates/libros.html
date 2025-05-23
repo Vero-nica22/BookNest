@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Libros</title>
+    <!--<link rel="stylesheet" href="../static/librosadmstyle.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">-->
     <link rel="stylesheet" href="../static/librosadmstyle.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
@@ -69,7 +70,7 @@
                     </form>
                 </div>
                 <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=No+Image' }}"
-                    alt="{{ libro['titulo'] }}">
+                    alt="{{ libro['titulo'] }}"> 
                 <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
                 <p>{{ libro['sinopsis'] }}</p>
             </div>
