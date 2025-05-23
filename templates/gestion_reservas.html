@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Gestión de Reservas</title>
-    <!--<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />-->
-    <link rel="stylesheet" href="../static/gestion_reservas.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
     <div class="container">
@@ -34,13 +33,11 @@
                 <td>
                     <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
                         <input type="hidden" name="estado" value="confirmada">
-                        <!--<button type="submit">Confirmar</button>-->
-                        <button type="submit" class="confirmar-btn">Confirmar</button>
+                        <button type="submit">Confirmar</button>
                     </form>
                     <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
                         <input type="hidden" name="estado" value="rechazada">
-                        <!--<button type="submit">Rechazar</button>-->
-                        <button type="submit" class="rechazar-btn">Rechazar</button>
+                        <button type="submit">Rechazar</button>
                     </form>
                 </td>
             </tr>
