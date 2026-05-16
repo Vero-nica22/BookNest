@@ -2,12 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mis Reservas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h2>Mis Reservas</h2>
-    
+    <div>
+        <button type="button" onclick="location.href='{{ url_for('auth.menu_cliente') }}'">← Volver al menú</button>
+    </div>
+
     <table border="1">
         <tr>
             <th>ID Reserva</th>
@@ -28,8 +32,7 @@
             <td>{{ reserva['estado'] }}</td>
             <td>
                 {% if reserva['estado'] != 'cancelada' %}
-                    <form method="POST" action="{{ url_for('auth.actualizar_reserva_cliente', id_reserva=reserva['id_reserva']) }}">
-                        <input type="hidden" name="estado" value="cancelada">
+                    <form method="POST" action="{{ url_for('reservas.cancelar_reserva', id_reserva=reserva['id_reserva']) }}">
                         <button type="submit">Cancelar</button>
                     </form>
                 {% else %}
