@@ -13,6 +13,16 @@
       <p>¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
     </div>
     <form method="POST" class="formulario-login">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
       <div class="campo-formulario">
         <label for="usuario">Usuario</label>
         <input type="text" name="correo" id="correo" placeholder="Escribe tu usuario...">

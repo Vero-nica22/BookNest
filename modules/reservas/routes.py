@@ -32,7 +32,7 @@ def _obtener_usuario(id_usuario: int):
     return usuario
 
 @reservas_bp.route('/', methods=['GET'])
-@requiere_rol('cliente')
+@requiere_rol('cliente', 'gerente', 'administrador')
 def listar_libros_reservables():
     conn = _get_connection()
     cursor = conn.cursor(dictionary=True)

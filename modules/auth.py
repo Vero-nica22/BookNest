@@ -1,19 +1,19 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash, current_app
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from config import DB_CONFIG
 from utils import requiere_rol
-import os
-from werkzeug.utils import secure_filename
-
 db = mysql.connector.connect(**DB_CONFIG)
+
+
+
 auth = Blueprint('auth', __name__)
 
 
 db = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="1234",
+    user="miusuario",
+    password="22",
     database="booknest"
 )
 
@@ -28,7 +28,7 @@ def registro():
         celular = request.form['celular']
         correo = request.form['correo']
         contrasena = generate_password_hash(request.form['contrasena'])
-        
+
         cursor = db.cursor()
         try:
             cursor.execute("""
@@ -41,7 +41,6 @@ def registro():
         except mysql.connector.Error as err:
             mensaje = f"Error: {err}"
             mensaje_class = "error"
-        cursor.close()
     return render_template('register.html', mensaje=mensaje, mensaje_class=mensaje_class)
 
 
@@ -59,10 +58,9 @@ def login():
             WHERE usuarios.correo = %s
         """, (correo,))
         usuario = cursor.fetchone()
-        cursor.close()
 
         if usuario and check_password_hash(usuario['contrasena'], contrasena):
-
+            
             session['usuario_id'] = usuario['id_usuario']
             session['rol'] = usuario['nombre_rol']
 
@@ -74,443 +72,98 @@ def login():
             elif usuario['nombre_rol'] == 'gerente':
                 return redirect('/menu_gerente')
         else:
-            flash("Credenciales incorrectas", "error")
-            return render_template('login.html')
+            return "Credenciales incorrectas"
     return render_template('login.html')
-
 @auth.route('/menu_cliente')
 @requiere_rol('cliente')
 def menu_cliente():
-    print("Cargando menu_cliente.html")
+    print("Cargando menu_cliente.html")  
     return render_template('menu_cliente.html')
 
 @auth.route('/menu_administrador')
 @requiere_rol('administrador')
 def menu_administrador():
-    print("Cargando menu_administrador.html")
+    print("Cargando menu_administrador.html")  
     return render_template('menu_administrador.html')
 
 @auth.route('/menu_gerente')
 @requiere_rol('gerente')
 def menu_gerente():
-    print("Cargando menu_gerente.html")
+    print("Cargando menu_gerente.html")  
     return render_template('menu_gerente.html')
 
 
+@auth.route('/libros')
+@requiere_rol('gerente', 'administrador')
+def libros():
+    return redirect(url_for('reservas.listar_libros_reservables'))
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+@auth.route('/gestion_reservas')
+@requiere_rol('gerente', 'administrador')
+def gestion_reservas_redirect():
+    return redirect(url_for('reservas.gestion_reservas'))
+
+
+@auth.route('/estadisticas')
+@requiere_rol('administrador')
+def estadisticas_redirect():
+    return redirect(url_for('reservas.estadisticas'))
+
 
 @auth.route('/productos', methods=['GET', 'POST'])
-@requiere_rol('administrador')
+@requiere_rol('gerente', 'administrador')
 def productos():
     cursor = db.cursor(dictionary=True)
 
     if request.method == 'POST':
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
-        imagen = request.files['imagen']
+        imagen_url = request.form['imagen_url']
 
-        filename = None
-        if imagen and allowed_file(imagen.filename):
-            filename = secure_filename(imagen.filename)
-            imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            imagen.save(imagen_path)
-
-        cursor.execute("INSERT INTO productos (nombre, descripcion, imagen_nombre) VALUES (%s, %s, %s)",
-                    (nombre, descripcion, filename))
+        cursor.execute("INSERT INTO productos (nombre, descripcion, imagen_url) VALUES (%s, %s, %s)", 
+                    (nombre, descripcion, imagen_url))
         db.commit()
         flash('Producto agregado exitosamente', 'success')
+        
         return redirect(url_for('auth.productos'))
 
     cursor.execute("SELECT * FROM productos")
     productos = cursor.fetchall()
-    cursor.close()
+
     return render_template('productos_admi.html', productos=productos)
 
 @auth.route('/eliminar_producto/<int:id_producto>', methods=['POST'])
-@requiere_rol('administrador')
+@requiere_rol('gerente', 'administrador')
 def eliminar_producto(id_producto):
     cursor = db.cursor(dictionary=True)
-
+    
     cursor.execute("DELETE FROM productos WHERE id_producto = %s", (id_producto,))
     db.commit()
-    cursor.close()
-
+    
     flash('Success', 'El producto fue eliminado')
-
-    return redirect(url_for('auth.productos'))
+    
+    return redirect(url_for('auth.productos'))  # Redirige de nuevo a la página de productos
 
 @auth.route('/actualizar_producto/<int:id>', methods=['GET', 'POST'])
-@requiere_rol('administrador')
+@requiere_rol('gerente', 'administrador')
 def actualizar_producto(id):
-    cursor = db.cursor(dictionary=True) 
-
+    cursor = db.cursor(dictionary=True)
+    
     if request.method == 'POST':
-        nombre = request.form.get('nombre')
-        descripcion = request.form.get('descripcion')
-        
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        imagen_url = request.form['imagen_url']
 
-        cursor.execute("SELECT imagen_nombre FROM productos WHERE id_producto = %s", (id,))
-        producto_existente = cursor.fetchone()
-        
-        if not producto_existente:
-            flash('Producto no encontrado.', 'danger')
-            cursor.close() 
-            return redirect(url_for('auth.productos'))
-
-        current_imagen_nombre = producto_existente['imagen_nombre'] 
-
-        imagen = request.files.get('imagen') 
-
-        filename_to_save = current_imagen_nombre 
-
-        if imagen and imagen.filename != '': 
-            if allowed_file(imagen.filename):
-                if current_imagen_nombre and current_imagen_nombre != 'default.png': 
-                    old_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_imagen_nombre)
-                    if os.path.exists(old_image_path):
-                        os.remove(old_image_path)
-                
-                filename_to_save = secure_filename(imagen.filename)
-                imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename_to_save)
-                imagen.save(imagen_path)
-            else:
-                flash('Tipo de archivo de imagen no permitido.', 'danger')
-                cursor.close() 
-                return redirect(url_for('auth.productos'))
-        
-        try:
-            cursor.execute("""
-                UPDATE productos
-                SET nombre = %s, descripcion = %s, imagen_nombre = %s
-                WHERE id_producto = %s
-            """, (nombre, descripcion, filename_to_save, id)) 
-            db.commit() 
-            flash('Producto actualizado con éxito', 'success')
-        except Exception as e:
-            db.rollback() 
-            flash(f'Error al actualizar el producto: {e}', 'danger')
-        finally:
-            cursor.close() 
-            
+        cursor.execute("""
+            UPDATE productos 
+            SET nombre = %s, descripcion = %s, imagen_url = %s 
+            WHERE id_producto = %s
+        """, (nombre, descripcion, imagen_url, id))
+        db.commit()
+        flash('Producto actualizado con éxito', 'success')
         return redirect(url_for('auth.productos'))
 
-    try:
-        cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
-        producto = cursor.fetchone()
-    except Exception as e:
-        flash(f'Error al cargar el producto: {e}', 'danger')
-        producto = None 
-    finally:
-        cursor.close() 
-
+    cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
+    producto = cursor.fetchone()
     return render_template('actualizar_producto.html', producto=producto)
-
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@auth.route('/ver_productos', methods=['GET'])
-@requiere_rol('cliente', 'gerente') 
-def ver_productos():
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM productos")
-    productos = cursor.fetchall()
-    cursor.close()
-    return render_template('productos.html', productos=productos)
-
-
-@auth.route('/libros', methods=['GET', 'POST'])
-@requiere_rol('administrador', 'gerente')
-def libros():
-    cursor = db.cursor(dictionary=True)
-
-    if request.method == 'POST':
-        titulo = request.form.get('titulo')
-        autor = request.form.get('autor')
-        sinopsis = request.form.get('sinopsis', '')
-        imagen = request.files.get('imagen')
-
-        filename = None
-        if imagen and allowed_file(imagen.filename):
-            filename = secure_filename(imagen.filename)
-            imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            imagen.save(imagen_path)
-
-        cursor.execute("""
-            INSERT INTO libros (titulo, autor, sinopsis, imagen) VALUES (%s, %s, %s, %s)
-        """, (titulo, autor, sinopsis, filename))
-        db.commit()
-        flash('Libro agregado exitosamente', 'success')
-        return redirect(url_for('auth.libros'))
-
-    cursor.execute("SELECT * FROM libros")
-    libros = cursor.fetchall()
-    cursor.close()
-    return render_template('libros.html', libros=libros)
-
-@auth.route('/eliminar_libro/<int:id>', methods=['POST'])
-@requiere_rol('administrador')
-def eliminar_libro(id):
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("DELETE FROM libros WHERE id_libro = %s", (id,))
-    db.commit()
-    cursor.close()
-    flash('Libro eliminado', 'success')
-    return redirect(url_for('auth.libros'))
-
-@auth.route('/actualizar_libro/<int:id_libro>', methods=['POST'])
-def actualizar_libro(id_libro):
-    if request.method == 'POST':
-        titulo = request.form['titulo']
-        autor = request.form['autor']
-        sinopsis = request.form['sinopsis']
-        imagen_nueva = request.files.get('imagen')
-        filename = None
-
-        if imagen_nueva and allowed_file(imagen_nueva.filename):
-            filename = secure_filename(imagen_nueva.filename)
-            imagen_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            imagen_nueva.save(imagen_path)
-
-        cursor = db.cursor()
-        if filename:
-            cursor.execute("""
-                UPDATE libros
-                SET titulo = %s, autor = %s, sinopsis = %s,
-                    imagen = %s
-                WHERE id_libro = %s
-            """, (titulo, autor, sinopsis, filename, id_libro))
-        else:
-            cursor.execute("""
-                UPDATE libros
-                SET titulo = %s, autor = %s, sinopsis = %s
-                WHERE id_libro = %s
-            """, (titulo, autor, sinopsis, id_libro))
-
-        db.commit()
-        cursor.close()
-        flash('Libro actualizado exitosamente', 'success')
-    return redirect(url_for('auth.libros'))
-
-@auth.route('/editar_libro/<int:id_libro>', methods=['GET'])
-@requiere_rol('administrador')
-def editar_libro(id_libro):
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM libros WHERE id_libro = %s", (id_libro,))
-    libro = cursor.fetchone()
-    cursor.close()
-    if not libro:
-        flash('Libro no encontrado', 'error')
-        return redirect(url_for('auth.libros'))
-    return render_template('editar_libro.html', libro=libro)
-
-@auth.route('/libros_cliente')
-@requiere_rol('cliente', 'administrador', 'gerente') 
-def libros_cliente():
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM libros")
-    libros = cursor.fetchall()
-    cursor.close()
-    return render_template('libros_cliente.html', libros=libros)
-
-@auth.route('/libro/<int:id_libro>', methods=['GET', 'POST'])
-@requiere_rol('cliente', 'administrador', 'gerente')  
-def detalle_libro(id_libro):
-    cursor = db.cursor(dictionary=True)
-
-    if request.method == 'POST':
-        comentario = request.form['comentario']
-        calificacion = request.form['calificacion']
-        id_cliente = session.get('usuario_id')
-
-        if not id_cliente:
-            flash('Debes iniciar sesión para dejar una reseña.', 'error')
-            return redirect(url_for('auth.login'))
-
-        cursor.execute("""
-            INSERT INTO resenas (id_libro, id_cliente, comentario, calificacion)
-            VALUES (%s, %s, %s, %s)
-        """, (id_libro, id_cliente, comentario, calificacion))
-        db.commit()
-        flash('¡Reseña enviada!', 'success')
-        return redirect(url_for('auth.detalle_libro', id_libro=id_libro))
-
-    cursor.execute("SELECT * FROM libros WHERE id_libro = %s", (id_libro,))
-    libro = cursor.fetchone()
-
-    cursor.execute("""
-        SELECT r.comentario, r.calificacion, r.fecha, u.nombre
-        FROM resenas r
-        JOIN usuarios u ON r.id_cliente = u.id_usuario
-        WHERE r.id_libro = %s
-        ORDER BY r.fecha DESC
-    """, (id_libro,))
-    resenas = cursor.fetchall()
-    cursor.close()
-
-    return render_template('detalle_libro.html', libro=libro, resenas=resenas)
-
-    id_usuario = request.form.get('id_usuario')
-    id_libro = request.form.get('id_libro')
-    fecha = request.form.get('fecha') 
-    hora_inicio = request.form.get('hora_inicio')  
-    hora_fin = request.form.get('hora_fin')
-
-    cursor = db.cursor()
-
-    cursor.execute("""
-        SELECT COUNT(*) FROM reservas
-        WHERE id_libro = %s
-        AND fecha_reserva = %s
-        AND estado = 'pendiente'
-        AND NOT (
-            hora_fin <= %s OR hora_inicio >= %s
-        )
-    """, (id_libro, fecha, hora_inicio, hora_fin))
-    
-    existe = cursor.fetchone()[0]
-
-    if existe > 0:
-        flash("Ya existe una reserva para ese libro en ese horario.", "error")
-        return redirect(url_for('auth.formulario_reserva', id_libro=id_libro))
-
-    
-    cursor.execute("""
-        INSERT INTO reservas (id_usuario, id_libro, fecha_reserva, hora_inicio, hora_fin, estado)
-        VALUES (%s, %s, %s, %s, %s, 'pendiente')
-    """, (id_usuario, id_libro, fecha, hora_inicio, hora_fin))
-    db.commit()
-
-    flash("Reserva realizada con éxito", "success")
-    return redirect(url_for('auth.reservas'))
-
-
-@auth.route('/actualizar_reserva_cliente/<int:id_reserva>', methods=['POST'])
-def actualizar_reserva_cliente(id_reserva):
-    nuevo_estado = request.form['estado']
-    cursor = db.cursor()
-    cursor.execute("UPDATE reservas SET estado = %s WHERE id_reserva = %s", (nuevo_estado, id_reserva))
-    db.commit()
-    cursor.close()
-    return redirect(url_for('auth.mis_reservas')) 
-
-
-@auth.route('/gestion_reservas', methods=['GET', 'POST'])
-@requiere_rol('gerente', 'administrador')
-def gestion_reservas():
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT r.id_reserva, u.nombre, l.titulo, r.fecha_reserva, r.hora_inicio, r.hora_fin, r.estado
-        FROM reservas r
-        JOIN usuarios u ON r.id_usuario = u.id_usuario
-        JOIN libros l ON r.id_libro = l.id_libro
-        WHERE r.estado = 'pendiente'
-    """)
-    reservas = cursor.fetchall()
-    cursor.close()
-    return render_template('gestion_reservas.html', reservas=reservas)
-
-@auth.route('/actualizar_reserva/<int:id_reserva>', methods=['POST'])
-def actualizar_reserva(id_reserva):
-    nuevo_estado = request.form['estado']
-    cursor = db.cursor()
-    cursor.execute("UPDATE reservas SET estado = %s WHERE id_reserva = %s", (nuevo_estado, id_reserva))
-    db.commit()
-    cursor.close()
-    return redirect(url_for('auth.gestion_reservas'))
-
-#Gerente, el de abajo poner que se necesita rol de gerente 
-@auth.route('/actualizar_estado_reserva/<int:id_reserva>', methods=['POST'])
-def actualizar_estado_reserva(id_reserva):
-    nuevo_estado = request.form.get('estado')
-
-    cursor = db.cursor()
-    cursor.execute("UPDATE reservas SET estado = %s WHERE id_reserva = %s", (nuevo_estado, id_reserva))
-    db.commit()
-    cursor.close()
-
-    return redirect(url_for('auth.gestion_reservas'))
-
-
-@auth.route('/reservas_confirmadas')
-@requiere_rol('gerente', 'administrador')
-
-def mostrar_reservas_confirmadas():
-    cursor = db.cursor(dictionary=True)
-    id_usuario = session.get('usuario_id')
-    if not id_usuario:
-        return redirect('/login')  
-
-
-    cursor.execute("""
-        SELECT r.id_reserva, u.nombre, u.apellido, l.titulo AS libro, 
-            r.fecha_reserva, r.hora_inicio, r.hora_fin, r.estado, r.comentarios
-        FROM reservas r
-        JOIN usuarios u ON r.id_usuario = u.id_usuario
-        JOIN libros l ON r.id_libro = l.id_libro
-        WHERE r.estado = 'confirmada'
-        ORDER BY r.fecha_reserva, r.hora_inicio
-    """)
-    reservas = cursor.fetchall()
-
-    return render_template('reservas_confirmadas.html', reservas=reservas)
-
-
-
-@auth.route('/estadisticas')
-@requiere_rol('administrador')
-def estadisticas():
-    cursor = db.cursor(dictionary=True)
-
-    # Libros más reservados
-    cursor.execute("""
-        SELECT l.titulo, COUNT(*) AS total_reservas
-        FROM reservas r
-        JOIN libros l ON r.id_libro = l.id_libro
-        GROUP BY r.id_libro
-        ORDER BY total_reservas DESC
-        LIMIT 5
-    """)
-    libros_reservados = cursor.fetchall()
-
-    # Estado de reservas
-    cursor.execute("""
-        SELECT estado, COUNT(*) AS total
-        FROM reservas
-        GROUP BY estado
-    """)
-    estados_reservas = cursor.fetchall()
-
-    # Reservas por mes
-    cursor.execute("""
-        SELECT DATE_FORMAT(fecha_reserva, '%Y-%m') AS mes, COUNT(*) AS total
-        FROM reservas
-        GROUP BY mes
-        ORDER BY mes
-    """)
-    reservas_por_mes = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template('estadisticas_admin.html',
-                        libros_reservados=libros_reservados,
-                        estados_reservas=estados_reservas,
-                        reservas_por_mes=reservas_por_mes)
-    
-    
-
-@auth.route('/eliminar_reserva/<int:id>', methods=['POST'])
-def eliminar_reserva(id):
-    if session.get('rol') != 'admin':
-        abort(403)  
-    
-    reserva = Reserva.query.get_or_404(id)
-    db.session.delete(reserva)
-    db.session.commit()
-    return redirect('/gestion_reservas')
