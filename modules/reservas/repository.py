@@ -41,6 +41,41 @@ def obtener_reservas_pendientes() -> list:
     return result
 
 
+def obtener_reservas_filtradas(estado: str, usuario: str, libro: str) -> list:
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT r.id_reserva, u.nombre, l.titulo,
+               r.fecha_reserva, r.hora_inicio, r.hora_fin, r.estado
+        FROM reservas r
+        JOIN usuarios u ON r.id_usuario = u.id_usuario
+        JOIN libros   l ON r.id_libro   = l.id_libro
+        WHERE 1=1
+    """
+    params = []
+
+    if estado and estado != 'todos':
+        query += " AND r.estado = %s"
+        params.append(estado)
+
+    if usuario:
+        query += " AND u.nombre LIKE %s"
+        params.append(f"%{usuario}%")
+
+    if libro:
+        query += " AND l.titulo LIKE %s"
+        params.append(f"%{libro}%")
+
+    query += " ORDER BY r.fecha_reserva, r.hora_inicio"
+
+    cursor.execute(query, params)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
+
+
 def obtener_reservas_confirmadas() -> list:
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)

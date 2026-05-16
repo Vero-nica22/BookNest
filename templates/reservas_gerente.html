@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,21 +7,23 @@
 <body>
     <h2>Control de Reservas</h2>
 
-    <form method="POST" action="{{ url_for('auth.ver_reservas_gerente') }}">
+    <form method="GET" action="{{ url_for('reservas.gestion_reservas') }}">
         <label for="estado">Estado:</label>
         <select name="estado">
-            <option value="Todos">Todos</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="confirmada">Confirmada</option>
-            <option value="completada">Completada</option>
-            <option value="cancelada">Cancelada</option>
+            <option value="todos">Todos</option>
+            <option value="pendiente"   {% if filtro_estado == 'pendiente'   %}selected{% endif %}>Pendiente</option>
+            <option value="confirmada"  {% if filtro_estado == 'confirmada'  %}selected{% endif %}>Confirmada</option>
+            <option value="completada"  {% if filtro_estado == 'completada'  %}selected{% endif %}>Completada</option>
+            <option value="cancelada"   {% if filtro_estado == 'cancelada'   %}selected{% endif %}>Cancelada</option>
         </select>
 
         <label for="usuario">Usuario:</label>
-        <input type="text" name="usuario" placeholder="Nombre de usuario">
+        <input type="text" name="usuario" placeholder="Nombre de usuario"
+               value="{{ filtro_usuario or '' }}">
 
         <label for="libro">Libro:</label>
-        <input type="text" name="libro" placeholder="Título del libro">
+        <input type="text" name="libro" placeholder="Título del libro"
+               value="{{ filtro_libro or '' }}">
 
         <button type="submit">Filtrar</button>
     </form>
@@ -34,36 +36,37 @@
             <th>Usuario</th>
             <th>Libro</th>
             <th>Fecha Reserva</th>
-            <th>Hora Reserva</th>
             <th>Estado</th>
             <th>Acción</th>
         </tr>
         {% for reserva in reservas %}
         <tr>
             <td>{{ reserva['id_reserva'] }}</td>
-            <td>{{ reserva['nombre_usuario'] }}</td>
-            <td>{{ reserva['titulo_libro'] }}</td>
+            <td>{{ reserva['nombre'] }}</td>
+            <td>{{ reserva['titulo'] }}</td>
             <td>{{ reserva['fecha_reserva'] }}</td>
             <td>{{ reserva['estado'] }}</td>
             <td>
-                <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
+                <form method="POST" action="{{ url_for('reservas.actualizar_estado', id_reserva=reserva['id_reserva']) }}">
                     <select name="estado">
-                        <option value="pendiente" {% if reserva['estado'] == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="pendiente"  {% if reserva['estado'] == 'pendiente'  %}selected{% endif %}>Pendiente</option>
                         <option value="confirmada" {% if reserva['estado'] == 'confirmada' %}selected{% endif %}>Confirmada</option>
                         <option value="completada" {% if reserva['estado'] == 'completada' %}selected{% endif %}>Completada</option>
-                        <option value="cancelada" {% if reserva['estado'] == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                        <option value="cancelada"  {% if reserva['estado'] == 'cancelada'  %}selected{% endif %}>Cancelada</option>
                     </select>
                     <button type="submit">Actualizar</button>
-                    {% if session['rol'] == 'admin' %}
-                        <form method="POST" action="{{ url_for('eliminar_reserva', id=reserva['id_reserva']) }}" onsubmit="return confirm('¿Seguro que desea eliminar esta reserva?');">
-                            <button type="submit">Eliminar</button>
-                        </form>
-                    {% endif %}
                 </form>
 
+                {% if session['rol'] == 'administrador' %}
+                    <form method="POST"
+                          action="{{ url_for('reservas.eliminar_reserva', id_reserva=reserva['id_reserva']) }}"
+                          onsubmit="return confirm('¿Seguro que desea eliminar esta reserva?');">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
 </body>
-</html> -->
+</html>

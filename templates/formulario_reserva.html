@@ -9,11 +9,13 @@
 <body>
     <div class="container">
         <div>
-            <button type="button" onclick="location.href='{{ url_for('auth.menu_cliente') }}'">← Volver al menú</button>
+            <a href="{{ url_for('auth.menu_cliente') }}">
+                <button type="button">← Volver al menú</button>
+            </a>
         </div>
 
         <form class="reserva-form" method="POST"
-              action="{{ url_for('reservas.crear_reserva', id_libro=libro['id_libro']) }}">
+            action="{{ url_for('reservas.crear_reserva', id_libro=libro['id_libro']) }}">
 
             <h2>Realizar reserva</h2>
 

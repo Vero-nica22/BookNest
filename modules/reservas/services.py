@@ -10,7 +10,6 @@ DURACION_MAXIMA_HORAS = 4
 FMT_HORA = "%H:%M"
 
 class ReservaError(Exception):
-    """Excepción de dominio para errores de negocio en reservas."""
     pass
 
 
@@ -65,6 +64,11 @@ def obtener_mis_reservas(id_usuario: int) -> list:
 
 def obtener_reservas_pendientes() -> list:
     return repository.obtener_reservas_pendientes()
+
+
+def obtener_reservas_filtradas(estado: str, usuario: str, libro: str) -> list:
+    return repository.obtener_reservas_filtradas(estado, usuario, libro)
+
 
 def obtener_reservas_confirmadas() -> list:
     return repository.obtener_reservas_confirmadas()

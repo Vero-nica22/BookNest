@@ -31,12 +31,12 @@
                 <td>{{ reserva['hora_fin'] }}</td>
                 <td>{{ reserva['estado'] }}</td>
                 <td>
-                    <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
+                    <form method="POST" action="{{ url_for('reservas.actualizar_estado', id_reserva=reserva['id_reserva']) }}">
                         <input type="hidden" name="estado" value="confirmada">
                         <button type="submit">Confirmar</button>
                     </form>
-                    <form method="POST" action="{{ url_for('auth.actualizar_reserva', id_reserva=reserva['id_reserva']) }}">
-                        <input type="hidden" name="estado" value="rechazada">
+                    <form method="POST" action="{{ url_for('reservas.actualizar_estado', id_reserva=reserva['id_reserva']) }}">
+                        <input type="hidden" name="estado" value="cancelada">
                         <button type="submit">Rechazar</button>
                     </form>
                 </td>
@@ -45,13 +45,14 @@
         </table>
 
         {% else %}
-        <p>No hay reservas pendientes.</p>
+            <p>No hay reservas pendientes.</p>
         {% endif %}
     </div>
-    <div>
-        <button type="button" onclick="location.href='/reservas_confirmadas'">Ver reservas confirmadas</button>
-    </div>
 
-
+    <a href="{{ url_for('reservas.reservas_confirmadas') }}">
+        <button type="button">
+            Ver reservas confirmadas
+        </button>
+    </a>
 </body>
 </html>

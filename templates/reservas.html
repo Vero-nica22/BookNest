@@ -16,9 +16,9 @@
 </style>
 <body>
     <h2>Libros Disponibles para Reserva</h2>
-    <div>
-        <button type="button" onclick="location.href='{{ url_for('reservas.mis_reservas') }}'">Mis reservas</button>
-    </div>
+    <a href="{{ url_for('reservas.mis_reservas') }}">
+        <button type="button">Mis reservas</button>
+    </a>
 
     <div class="libros">
         {% for libro in libros %}

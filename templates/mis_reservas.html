@@ -8,9 +8,9 @@
 </head>
 <body>
     <h2>Mis Reservas</h2>
-    <div>
-        <button type="button" onclick="location.href='{{ url_for('auth.menu_cliente') }}'">← Volver al menú</button>
-    </div>
+    <a href="{{ url_for('auth.menu_cliente') }}">
+        <button type="button">← Volver al menú</button>
+    </a>
 
     <table border="1">
         <tr>

@@ -5,11 +5,11 @@
 </head>
 <style>
     body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FCEBD9;
-}
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #FCEBD9;
+    }
 </style>
 <body>
     <h1>Reservas Confirmadas</h1>
@@ -28,11 +28,11 @@
             <tbody>
                 {% for r in reservas %}
                 <tr>
-                    <td>{{ r.nombre }} {{ r.apellido }}</td>
-                    <td>{{ r.libro }}</td>
-                    <td>{{ r.fecha_reserva }}</td>
-                    <td>{{ r.hora_inicio }}</td>
-                    <td>{{ r.hora_fin }}</td>
+                    <td>{{ r['nombre'] }} {{ r['apellido'] }}</td>
+                    <td>{{ r['libro'] }}</td>
+                    <td>{{ r['fecha_reserva'] }}</td>
+                    <td>{{ r['hora_inicio'] }}</td>
+                    <td>{{ r['hora_fin'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -98,8 +98,17 @@ def cancelar_reserva(id_reserva: int):
 @reservas_bp.route('/gestion', methods=['GET'])
 @requiere_rol('gerente', 'administrador')
 def gestion_reservas():
-    lista = services.obtener_reservas_pendientes()
-    return render_template('gestion_reservas.html', reservas=lista)
+    filtro_estado  = request.args.get('estado',  'todos')
+    filtro_usuario = request.args.get('usuario', '').strip()
+    filtro_libro   = request.args.get('libro',   '').strip()
+
+    lista = services.obtener_reservas_filtradas(filtro_estado, filtro_usuario, filtro_libro)
+
+    return render_template('reservas_gerente.html',
+                            reservas=lista,
+                            filtro_estado=filtro_estado,
+                            filtro_usuario=filtro_usuario,
+                            filtro_libro=filtro_libro)
 
 
 @reservas_bp.route('/gestion/actualizar/<int:id_reserva>', methods=['POST'])
