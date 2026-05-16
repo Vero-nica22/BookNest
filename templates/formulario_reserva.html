@@ -2,48 +2,54 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Realizar Reserva</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
     <div class="container">
-        <form class="reserva-form" method="POST" action="{{ url_for('auth.guardar_reserva') }}">
+        <div>
+            <button type="button" onclick="location.href='{{ url_for('auth.menu_cliente') }}'">← Volver al menú</button>
+        </div>
+
+        <form class="reserva-form" method="POST"
+              action="{{ url_for('reservas.crear_reserva', id_libro=libro['id_libro']) }}">
+
             <h2>Realizar reserva</h2>
 
-            
-            <input type="hidden" name="id_usuario" value="{{ usuario['id_usuario'] }}" />
-            <input type="hidden" name="id_libro" value="{{ libro['id_libro'] }}" />
-            
             <div class="form-row">
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" name="nombre" value="{{ usuario['nombre'] }}" readonly />
+                    <input type="text" id="nombre" value="{{ usuario['nombre'] }}" readonly />
                 </div>
                 <div class="form-group">
                     <label for="apellido">Apellido</label>
-                    <input type="text" id="apellido" name="apellido" value="{{ usuario['apellido'] }}" readonly />
+                    <input type="text" id="apellido" value="{{ usuario['apellido'] }}" readonly />
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="libro">Libro</label>
-                <input type="text" id="libro" name="libro" value="{{ libro['titulo'] }}" readonly />
+                <input type="text" id="libro" value="{{ libro['titulo'] }}" readonly />
             </div>
 
-            <form method="POST" action="{{ url_for('auth.crear_reserva', id_libro=libro.id_libro) }}">
-                <label>Fecha:</label>
-                <input type="date" name="fecha" required>
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" name="fecha" required />
+            </div>
 
-                <label>Hora inicio:</label>
-                <input type="time" name="hora_inicio" required>
+            <div class="form-group">
+                <label for="hora_inicio">Hora inicio</label>
+                <input type="time" id="hora_inicio" name="hora_inicio" required />
+            </div>
 
-                <label>Hora fin:</label>
-                <input type="time" name="hora_fin" required>
+            <div class="form-group">
+                <label for="hora_fin">Hora fin</label>
+                <input type="time" id="hora_fin" name="hora_fin" required />
+            </div>
 
-                <button type="submit">Reservar</button>
-            </form>
-
-
+            <button type="submit">Reservar</button>
+        </form>
     </div>
 </body>
 </html>
