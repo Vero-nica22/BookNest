@@ -1,180 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Catálogo de Libros - Gerente</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f8f0e3;
-    }
-
-    header {
-      background-color: #fef3dc;
-      padding: 10px 20px;
-    }
-
-    .top-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .top-header img {
-      height: 90px;
-    }
-
-    .top-header p {
-      margin: 0;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      padding: 0;
-      margin-top: 10px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .banner img {
-      width: 100%;
-      height: auto;
-      max-height: 500px;
-      object-fit: cover;
-    }
-
-    main {
-      padding: 30px;
-      text-align: center;
-    }
-
-    .libros {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-top: 20px;
-    }
-
-    .libro {
-      width: 180px;
-      text-align: left;
-      position: relative;
-    }
-
-    .libro img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .visualizar {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background-color: #ffffffcc;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      padding: 4px 6px;
-      border-radius: 4px;
-    }
-
-    .visualizar:hover {
-      background-color: #f0e2c6;
-      transform: scale(1.1);
-    }
-
-    button.ver-mas {
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #d4b48a;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    h2 {
-      color: #3e3e3e;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest — Catálogo de Libros</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=500;600&family=DM+Sans:wght=400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_gerente.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='librosAdmin.css') }}">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="/menu_gerente" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros">Libros</a></li>
+                <li><a href="/gestion_reservas">Reservas</a></li>
+                <li><a href="/productos">Productos</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
 
-  <header>
-    <div class="top-header">
-      <img src="Logobooknest.png" alt="Logo">
-      <!--<p><strong>Libros</strong></p>-->
-    </div>
-    <nav>
-      <ul>
-        <li><a href="#">Buscar Libros</a></li>
-        <li><a href="#">Productos</a></li>
-        <li><a href="#">Libros</a></li>
-        <li><a href="#">Reservas</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <section class="banner">
-    <img src="https://img.freepik.com/free-photo/open-old-books-stacked-closeup-blurred-background_169016-24881.jpg" alt="Banner">
-  </section>
-
-  <main>
-    <h2>Encuentra tus libros favoritos aquí</h2>
-    <div class="libros">
-
-      <div class="libro">
-        <button class="visualizar" title="Visualizar">👁</button>
-        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/8a/9e/8a9ed4b676d987ffb8f1cece4aa5ad2a.jpg" alt="Bajo la Misma Estrella">
-        <p><strong>Bajo la Misma Estrella</strong><br>John Green</p>
-        <p>Hazel tiene dieciséis años, está enferma de cáncer desde pequeña y sobrevive gracias a un milagro médico.</p>
-      </div>
-
-      <div class="libro">
-        <button class="visualizar" title="Visualizar">👁</button>
-        <img src="https://libreriasiglo.com/91502-large_360/romeo-y-julieta.webp" alt="Romeo y Julieta">
-        <p><strong>Romeo y Julieta</strong><br>William Shakespeare</p>
-        <p>Dos jóvenes enamorados de familias enemigas viven una historia trágica llena de amor y destino.</p>
-      </div>
-
-      <div class="libro">
-        <button class="visualizar" title="Visualizar">👁</button>
-        <img src="https://images.cdn2.buscalibre.com/fit-in/360x360/6a/ca/6acabcfa8d03abc2b853155997d4b21d.jpg" alt="El Diario de Ana Frank">
-        <p><strong>El Diario de Ana Frank</strong><br>Ana Frank</p>
-        <p>Diario de una niña judía que se esconde de los nazis durante la Segunda Guerra Mundial.</p>
-      </div>
-
-      <div class="libro">
-        <button class="visualizar" title="Visualizar">👁</button>
-        <img src="https://m.media-amazon.com/images/I/81YOuOGFCJL.jpg" alt="Harry Potter">
-        <p><strong>Harry Potter y la Piedra Filosofal</strong><br>J.K. Rowling</p>
-        <p>Harry descubre que es un mago y asiste a Hogwarts, donde vive sus primeras aventuras mágicas.</p>
-      </div>
-
-      <div class="libro">
-        <button class="visualizar" title="Visualizar">👁</button>
-        <img src="https://image.cdn1.buscalibre.com/5b57fc1690f0b5295a8b4567.RS360x360.jpg" alt="El Principito">
-        <p><strong>El Principito</strong><br>Antoine de Saint-Exupéry</p>
-        <p>Un pequeño príncipe viaja por el universo aprendiendo sobre la vida, el amor y la soledad.</p>
-      </div>
-
+    <div class="banner-libros">
+        <img src="{{ url_for('static', filename='banner.jpg') }}" alt="Banner libros">
     </div>
 
-    <button class="ver-mas">Ver más Libros</button>
-  </main>
+    <main class="libros-admin-main">
+
+        <div class="libros-admin-header">
+            <h1>Catálogo de libros</h1>
+            <div class="header-acciones">
+                <a href="/libros_cliente" class="btn-secundario">Ver reseñas de libros</a>
+            </div>
+        </div>
+
+        <div class="libros-grid">
+            {% for libro in libros %}
+            <div class="libro-card">
+                <div class="libro-cover">
+                    <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=Sin+imagen' }}"
+                        alt="{{ libro['titulo'] }}">
+                </div>
+                <div class="libro-info">
+                    <h3>{{ libro['titulo'] }}</h3>
+                    <p class="libro-autor">{{ libro['autor'] }}</p>
+                    <p class="libro-sinopsis">{{ libro['sinopsis'] }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
 
 </body>
 </html>

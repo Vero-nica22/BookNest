@@ -1,28 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Productos disponibles</title>
+    <title>BookNest — Productos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='indexstyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='productos.css') }}">
 </head>
-<style>
-    body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FCEBD9;
-}
-</style>
 <body>
-    <h1>Catálogo de Productos</h1>
-    <div style="display: flex; flex-wrap: wrap;">
-        {% for producto in productos %}
-            <div style="border: 1px solid #ccc; margin: 10px; padding: 10px; width: 200px;">
-                <h3>{{ producto.nombre }}</h3>
-                <p>{{ producto.descripcion }}</p>
-                {% if producto.imagen_nombre %}
-                    <img src="{{ url_for('static', filename='uploads/' ~ producto.imagen_nombre) }}" width="150">
-                {% endif %}
+    <header>
+        <nav>
+            <a href="/menu_cliente" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros_cliente">Buscar libros</a></li>
+                <li><a href="/reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
+
+    <main class="productos-main">
+        <div class="productos-header">
+            <h1>Catálogo de productos</h1>
+        </div>
+
+        <div class="productos-grid">
+            {% for producto in productos %}
+            <div class="producto-card">
+                <div class="producto-cover">
+                    {% if producto.imagen_nombre %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ producto.imagen_nombre) }}" alt="{{ producto.nombre }}">
+                    {% else %}
+                        <div class="sin-imagen">Sin imagen</div>
+                    {% endif %}
+                </div>
+                <div class="producto-info">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p class="producto-descripcion">{{ producto.descripcion }}</p>
+                    {% if producto.precio %}
+                    <p class="producto-precio">${{ producto.precio }}</p>
+                    {% endif %}
+                </div>
             </div>
-        {% endfor %}
-    </div>
+            {% else %}
+            <p class="sin-productos">No hay productos disponibles.</p>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>

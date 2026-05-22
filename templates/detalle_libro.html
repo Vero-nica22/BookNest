@@ -1,86 +1,99 @@
-<!-- templates/detalle_libro.html
-<h1>{{ libro.titulo }}</h1>
-<p><strong>Autor:</strong> {{ libro.autor }}</p>
-<p>{{ libro.sinopsis }}</p>
-{% if libro.imagen %}
-    <img src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" width="200">
-{% endif %}
-
-<h2>Agregar Reseña</h2>
-<form method="POST">
-    <label for="comentario">Comentario:</label>
-    <textarea name="comentario" required></textarea>
-
-    <label for="calificacion">Calificación (1-5):</label>
-    <input type="number" name="calificacion" min="1" max="5" required>
-
-    <button type="submit">Enviar Reseña</button>
-</form>
-
-
-<h2>Reseñas</h2>
-{% for r in resenas %}
-    <div style="border-top: 1px solid #ccc; margin-top: 10px; padding-top: 10px;">
-        <p><strong>{{ r.cliente }}</strong> ({{ r.fecha.strftime('%Y-%m-%d') }})</p>
-        <p>Calificación: {{ r.calificacion }} ⭐</p>
-        <p>{{ r.comentario }}</p>
-    </div>
-{% else %}
-    <p>No hay reseñas aún.</p>
-{% endfor %} -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>{{ libro.titulo }} | BookNest</title>
-    <link rel="stylesheet" href="../static/detalle_libro.css">
+    <title>BookNest — {{ libro.titulo }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='indexstyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='detalle_libro.css') }}">
 </head>
 <body>
-    <div class="libro-detalle">
-        <h1>{{ libro.titulo }}</h1>
-        <p><strong>Autor:</strong> {{ libro.autor }}</p>
-        <p class="sinopsis">{{ libro.sinopsis }}</p>
-        {% if libro.imagen %}
-            <img class="libro-imagen" src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" alt="Portada de {{ libro.titulo }}">
-        {% endif %}
-    </div>
+    <header>
+        <nav>
+            <a href="/menu_cliente" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros_cliente">Buscar libros</a></li>
+                <li><a href="#">Mis libros</a></li>
+                <li><a href="/reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
 
-    <div class="resena-formulario">
-        <h2>Agregar Reseña</h2>
-        <form method="POST">
-            <label for="comentario">Comentario:</label>
-            <input type="text" name="comentario" id="comentario" required>
-            <label for="calificacion">Calificación (1-5):</label>
-            <input type="number" name="calificacion" id="calificacion" min="1" max="5" required>
-            <button type="submit">Enviar Reseña</button>
-        </form>
-    </div>
+    <main class="detalle-main">
+        <div class="detalle-container">
 
-    <div class="resenas-lista">
-        <h2>Reseñas</h2>
-        {% for r in resenas %}
-            <div class="resena">
-                <p class="resena-header">
-                    <strong>{{ r.cliente }}</strong>
-                    <span class="resena-fecha">({{ r.fecha.strftime('%Y-%m-%d') }})</span>
-                </p>
-                <p>
-                    Calificación:
-                    <span class="estrellas">
-                        {% for i in range(r.calificacion) %}
-                            <span class="estrella">&#9733;</span>
-                        {% endfor %}
-                        {% for i in range(5 - r.calificacion) %}
-                            <span class="estrella vacia">&#9734;</span>
-                        {% endfor %}
-                    </span>
-                </p>
-                <p>{{ r.comentario }}</p>
+            <!-- Columna izquierda: portada -->
+            <div class="detalle-cover">
+                {% if libro.imagen %}
+                    <img src="{{ url_for('static', filename='uploads/' + libro.imagen) }}" alt="{{ libro.titulo }}">
+                {% else %}
+                    <div class="sin-portada">Sin portada</div>
+                {% endif %}
             </div>
-        {% else %}
-            <p>No hay reseñas aún.</p>
-        {% endfor %}
-    </div>
+
+            <!-- Columna derecha: info + reseñas -->
+            <div class="detalle-content">
+
+                <div class="detalle-info">
+                    <h1>{{ libro.titulo }}</h1>
+                    <p class="detalle-autor">{{ libro.autor }}</p>
+                    <p class="detalle-sinopsis">{{ libro.sinopsis }}</p>
+                </div>
+
+                <!-- Formulario reseña -->
+                <div class="resena-form-wrap">
+                    <h2>Agregar reseña</h2>
+                    <form method="POST" class="resena-form">
+                        <div class="form-group">
+                            <label for="comentario">Comentario</label>
+                            <textarea name="comentario" id="comentario" placeholder="Escribe tu opinión sobre este libro..." required></textarea>
+                        </div>
+                        <div class="form-group form-row">
+                            <div>
+                                <label for="calificacion">Calificación (1-5)</label>
+                                <input type="number" name="calificacion" id="calificacion" min="1" max="5" placeholder="1-5" required>
+                            </div>
+                            <button type="submit" class="btn-enviar">Enviar reseña</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Reseñas existentes -->
+                <div class="resenas-wrap">
+                    <h2>Reseñas</h2>
+                    {% for r in resenas %}
+                    <div class="resena-card">
+                        <div class="resena-header">
+                            <span class="resena-cliente">{{ r.cliente }}</span>
+                            <span class="resena-fecha">{{ r.fecha.strftime('%d/%m/%Y') }}</span>
+                        </div>
+                        <div class="resena-estrellas">
+                            {% for i in range(r.calificacion) %}⭐{% endfor %}
+                        </div>
+                        <p class="resena-comentario">{{ r.comentario }}</p>
+                    </div>
+                    {% else %}
+                    <p class="sin-resenas">Aún no hay reseñas para este libro.</p>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </main>
 </body>
 </html>

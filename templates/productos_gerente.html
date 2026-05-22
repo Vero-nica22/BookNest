@@ -7,21 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='menu_admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_gerente.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='productosadmstyle.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="/menu_administrador" class="nav-logo">
+            <a href="/menu_gerente" class="nav-logo">
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
             </a>
             <ul>
                 <li><a href="/libros">Libros</a></li>
                 <li><a href="/gestion_reservas">Reservas</a></li>
                 <li><a href="/productos">Productos</a></li>
-                <li><a href="/estadisticas">Ver estadísticas</a></li>
             </ul>
             <a href="/logout" class="cerrar-sesion">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
@@ -82,15 +81,15 @@
                 <div class="form-group">
                     <label>Cambiar imagen</label>
                     <label for="editImagen" class="btn-archivo">Seleccionar imagen</label>
-                    <input type="text" name="imagen_url" id="editImagen" accept="image/*" style="display:none">
+                    <input type="file" name="imagen" id="editImagen" accept="image/*" style="display:none">
                 </div>
                 <button type="submit" class="btn-primario">Guardar cambios</button>
             </form>
         </div>
     </div>
 
-    <main class="productos-admin-main">
-        <div class="productos-admin-header">
+    <main class="productos-gerente-main">
+        <div class="productos-gerente-header">
             <h1>Productos</h1>
         </div>
 

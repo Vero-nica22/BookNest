@@ -92,3 +92,20 @@ h1 {
     border: 1px solid #f5c6cb;
 }
 
+.link-login {
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #000000;
+    margin-top: 12px;
+}
+
+.link-login a {
+    color: #2756f2;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.link-login a:hover {
+    text-decoration: underline;
+}

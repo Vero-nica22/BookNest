@@ -29,7 +29,7 @@
 
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>Registro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='registerstyle.css') }}">
@@ -70,6 +70,7 @@
             </div>
             <button type="submit">Crear Cuenta</button>
         </form>
+        <p class="link-login">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
         {% if mensaje %}
         <p id="mensaje" class="mensaje {{ mensaje_class }}">{{ mensaje }}</p>
         {% endif %}

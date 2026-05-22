@@ -6,21 +6,23 @@
     <title>BookNest — Catálogo de Libros</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=500;600&family=DM+Sans:wght=400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='menu_admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='librosAdmin.css') }}">
 </head>
 <body>
     <header>
         <nav>
-            <a href="/menu_administrador" class="nav-logo">
+            <a href="{% if session.get('rol') == 'administrador' %}/menu_administrador{% else %}/menu_gerente{% endif %}" class="nav-logo">
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
             </a>
             <ul>
                 <li><a href="/libros">Libros</a></li>
                 <li><a href="/gestion_reservas">Reservas</a></li>
                 <li><a href="/productos">Productos</a></li>
-                <li><a href="/estadisticas">Ver estadísticas</a></li>
+                {% if session.get('rol') == 'administrador' %}
+                    <li><a href="/estadisticas">Ver estadísticas</a></li>
+                {% endif %}
             </ul>
             <a href="/logout" class="cerrar-sesion">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
@@ -42,16 +44,17 @@
 
     <main class="libros-admin-main">
 
-        <!-- Encabezado -->
         <div class="libros-admin-header">
             <h1>Catálogo de libros</h1>
             <div class="header-acciones">
                 <a href="/libros_cliente" class="btn-secundario">Ver reseñas de libros</a>
-                <button id="mostrar-formulario-agregar" class="btn-primario">Agregar nuevo libro</button>
+                {% if session.get('rol') == 'administrador' %}
+                    <button id="mostrar-formulario-agregar" class="btn-primario">Agregar nuevo libro</button>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Formulario agregar -->
+        {% if session.get('rol') == 'administrador' %}
         <div id="form-agregar-libro" class="form-card" style="display:none;">
             <h2>Agregar nuevo libro</h2>
             <form method="POST" action="{{ url_for('auth.libros') }}" enctype="multipart/form-data" class="form-grid">
@@ -76,14 +79,16 @@
                 </div>
             </form>
         </div>
+        {% endif %}
 
-        <!-- Grid de libros -->
         <div class="libros-grid">
             {% for libro in libros %}
             <div class="libro-card">
                 <div class="libro-cover">
                     <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) if libro['imagen'] else 'https://via.placeholder.com/180x240?text=Sin+imagen' }}"
                         alt="{{ libro['titulo'] }}">
+                    
+                    {% if session.get('rol') == 'administrador' %}
                     <div class="libro-acciones">
                         <button class="btn-editar" type="button"
                             data-id="{{ libro['id_libro'] }}"
@@ -94,11 +99,12 @@
                             onclick="openModal(this)">
                             Editar
                         </button>
-                        <form method="POST" action="{{ url_for('auth.eliminar_libro', id=libro['id_libro']) }}"
+                        <form method="POST" action="{{ url_for('auth.eliminar_libro', id_libro=libro['id_libro']) }}"
                             onsubmit="return confirm('¿Seguro que quieres eliminar este libro?');">
                             <button type="submit" class="btn-eliminar">Eliminar</button>
                         </form>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="libro-info">
                     <h3>{{ libro['titulo'] }}</h3>
@@ -110,7 +116,7 @@
         </div>
     </main>
 
-    <!-- Modal editar -->
+    {% if session.get('rol') == 'administrador' %}
     <div id="modalEditar" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
@@ -142,8 +148,10 @@
             </form>
         </div>
     </div>
+    {% endif %}
 
     <script>
+    {% if session.get('rol') == 'administrador' %}
     const formEditar = document.getElementById('form-editar-libro');
 
     function openModal(button) {
@@ -180,6 +188,7 @@
         form.style.display = visible ? 'none' : 'block';
         this.textContent = visible ? 'Agregar nuevo libro' : 'Ocultar formulario';
     });
+    {% endif %}
     </script>
 </body>
 </html>
