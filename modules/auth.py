@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from config import DB_CONFIG
@@ -74,6 +74,34 @@ def login():
         else:
             return "Credenciales incorrectas"
     return render_template('login.html')
+
+
+@auth.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json(silent=True) or request.form
+    correo = data.get('correo')
+    contrasena = data.get('contrasena')
+
+    if not correo or not contrasena:
+        return jsonify({'error': 'Correo y contraseña son requeridos.'}), 400
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+            SELECT usuarios.id_usuario, usuarios.contrasena, roles.nombre_rol
+            FROM usuarios
+            INNER JOIN roles ON usuarios.id_rol = roles.id_rol
+            WHERE usuarios.correo = %s
+        """, (correo,))
+    usuario = cursor.fetchone()
+
+    if usuario and check_password_hash(usuario['contrasena'], contrasena):
+        session['usuario_id'] = usuario['id_usuario']
+        session['rol'] = usuario['nombre_rol']
+        return jsonify({'message': 'Autenticación exitosa.', 'rol': usuario['nombre_rol']}), 200
+
+    return jsonify({'error': 'Credenciales incorrectas.'}), 401
+
+
 @auth.route('/menu_cliente')
 @requiere_rol('cliente')
 def menu_cliente():
@@ -143,7 +171,7 @@ def eliminar_producto(id_producto):
     
     flash('Success', 'El producto fue eliminado')
     
-    return redirect(url_for('auth.productos'))  # Redirige de nuevo a la página de productos
+    return redirect(url_for('auth.productos')) 
 
 @auth.route('/actualizar_producto/<int:id>', methods=['GET', 'POST'])
 @requiere_rol('gerente', 'administrador')
