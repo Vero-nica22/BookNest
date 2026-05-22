@@ -3,40 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservas de Libros</title>
+    <title>BookNest — Reservas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_cliente.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='reservas.css') }}">
 </head>
-<style>
-    body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FCEBD9;
-}
-</style>
 <body>
-    <h2>Libros Disponibles para Reserva</h2>
-    <a href="{{ url_for('reservas.mis_reservas') }}">
-        <button type="button">Mis reservas</button>
-    </a>
+    <header>
+        <nav>
+            <a href="/menu_cliente" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros_cliente">Buscar libros</a></li>
+                <li><a href="/mis_libros">Mis libros</a></li>
+                <li><a href="/reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
 
-    <div class="libros">
-        {% for libro in libros %}
-            <div class="libro">
-                {% if libro['imagen'] %}
-                    <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) }}" alt="{{ libro['titulo'] }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/180x240?text=No+Image" alt="{{ libro['titulo'] }}">
-                {% endif %}
+    <main class="reservas-main">
+        <div class="reservas-header">
+            <h1>Libros disponibles para reserva</h1>
+            <a href="{{ url_for('reservas.mis_reservas') }}" class="btn-secundario">Mis reservas</a>
+        </div>
 
-                <p><strong>{{ libro['titulo'] }}</strong><br>{{ libro['autor'] }}</p>
-                <p>{{ libro['sinopsis'] }}</p>
-
-                <form method="GET" action="{{ url_for('reservas.formulario_reserva', id_libro=libro['id_libro']) }}">
-                    <button type="submit">Reservar</button>
-                </form>
+        <div class="libros-grid">
+            {% for libro in libros %}
+            <div class="libro-card">
+                <div class="libro-cover">
+                    {% if libro['imagen'] %}
+                        <img src="{{ url_for('static', filename='uploads/' + libro['imagen']) }}" alt="{{ libro['titulo'] }}">
+                    {% else %}
+                        <div class="sin-portada">Sin portada</div>
+                    {% endif %}
+                </div>
+                <div class="libro-info">
+                    <h3>{{ libro['titulo'] }}</h3>
+                    <p class="libro-autor">{{ libro['autor'] }}</p>
+                    <p class="libro-sinopsis">{{ libro['sinopsis'] }}</p>
+                    <form method="GET" action="{{ url_for('reservas.formulario_reserva', id_libro=libro['id_libro']) }}">
+                        <button type="submit" class="btn-reservar">Reservar</button>
+                    </form>
+                </div>
             </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>

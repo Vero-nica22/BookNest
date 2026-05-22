@@ -1,32 +1,43 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>BookNest</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='indexstyle.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_admin.css') }}">
 </head>
 <body>
     <header>
-        
         <nav>
-            <a href="/menu_administrador">
+            <a href="/menu_administrador" class="nav-logo">
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
             </a>
             <ul>
-                <!-- <li><a href="#">Buscar libros</a></li> -->
                 <li><a href="/libros">Libros</a></li>
                 <li><a href="/gestion_reservas">Reservas</a></li>
                 <li><a href="/productos">Productos</a></li>
                 <li><a href="/estadisticas">Ver estadísticas</a></li>
             </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
         </nav>
     </header>
     <main>
         <div class="bienvenida">
             <h1>¡Bienvenido a BookNest!</h1>
         </div>
-        <div class="imagen-principal">
-            <img src="{{ url_for('static', filename='imagen-principal.jpg') }}" alt="Imagen Principal">
+        <div class="hero-wrap">
+            <img src="{{ url_for('static', filename='imagen-principal.jpg') }}" alt="Imagen Principal" class="hero-img">
         </div>
     </main>
 </body>

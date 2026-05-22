@@ -2,51 +2,70 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Estadísticas del Administrador</title>
+    <title>BookNest — Estadísticas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estadisticas.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7e3ca;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-            
-        }
-
-        .contenedor {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        canvas {
-            display: block;
-            margin: 20px auto;
-            width: 400px;
-            height: 250px;
-        }
-
-        h1, h2 {
-            color: #333;
-        }
-    </style>
 </head>
 <body>
-    <div class="contenedor">
-        <h1>📊 Estadísticas del Administrador</h1>
+    <header>
+        <nav>
+            <a href="/menu_administrador" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros">Libros</a></li>
+                <li><a href="/gestion_reservas">Reservas</a></li>
+                <li><a href="/productos">Productos</a></li>
+                <li><a href="/estadisticas">Ver estadísticas</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
 
+    <main class="estadisticas-main">
+        <div class="estadisticas-header">
+            <h1>Estadísticas</h1>
+        </div>
 
-        <h2>Libros más reservados</h2>
-        <canvas id="librosChart"></canvas>
+        <div class="graficas-grid">
 
+            <div class="grafica-card">
+                <h2>Libros más reservados</h2>
+                <div class="canvas-wrap">
+                    <canvas id="librosChart"></canvas>
+                </div>
+            </div>
 
-        <h2>Estado de las reservas</h2>
-        <canvas id="estadoChart"></canvas>
+            <div class="grafica-card">
+                <h2>Estado de las reservas</h2>
+                <div class="canvas-wrap">
+                    <canvas id="estadoChart"></canvas>
+                </div>
+            </div>
 
+            <div class="grafica-card grafica-full">
+                <h2>Reservas por mes</h2>
+                <div class="canvas-wrap">
+                    <canvas id="mesChart"></canvas>
+                </div>
+            </div>
 
-        <h2>Reservas por mes</h2>
-        <canvas id="mesChart"></canvas>
-    </div>
+        </div>
+    </main>
 
     <script>
         const librosData = {
@@ -54,27 +73,49 @@
             datasets: [{
                 label: 'Reservas',
                 data: {{ libros_reservados | map(attribute='total_reservas') | list | tojson | safe }},
-                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                backgroundColor: 'rgba(201, 168, 124, 0.7)',
+                borderColor: '#c9a87c',
+                borderWidth: 1,
+                borderRadius: 6
             }]
         };
 
         new Chart(document.getElementById('librosChart'), {
             type: 'bar',
             data: librosData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e8cdb0' } },
+                    x: { grid: { display: false } }
+                }
+            }
         });
 
         const estadoData = {
             labels: {{ estados_reservas | map(attribute='estado') | list | tojson | safe }},
             datasets: [{
-                label: 'Cantidad',
                 data: {{ estados_reservas | map(attribute='total') | list | tojson | safe }},
-                backgroundColor: ['#f39c12', '#27ae60', '#e74c3c']
+                backgroundColor: ['#c9a87c', '#7a5c3a', '#e8cdb0'],
+                borderWidth: 0
             }]
         };
 
         new Chart(document.getElementById('estadoChart'), {
             type: 'pie',
             data: estadoData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { family: 'DM Sans', size: 12 }, color: '#4a3728' }
+                    }
+                }
+            }
         });
 
         const mesData = {
@@ -82,15 +123,27 @@
             datasets: [{
                 label: 'Reservas',
                 data: {{ reservas_por_mes | map(attribute='total') | list | tojson | safe }},
-                borderColor: 'rgba(75, 192, 192, 1)',
-                fill: false,
-                tension: 0.3
+                borderColor: '#7a5c3a',
+                backgroundColor: 'rgba(201, 168, 124, 0.15)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#7a5c3a',
+                pointRadius: 4
             }]
         };
 
         new Chart(document.getElementById('mesChart'), {
             type: 'line',
             data: mesData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e8cdb0' } },
+                    x: { grid: { display: false } }
+                }
+            }
         });
     </script>
 </body>

@@ -1,0 +1,227 @@
+.control-main {
+    background-color: #F3DBC3;
+    min-height: calc(100vh - 100px);
+    padding: 40px 48px;
+}
+
+.control-header {
+    max-width: 1100px;
+    margin: 0 auto 24px auto;
+}
+
+.control-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+}
+
+/* Filtros */
+.filtros-card {
+    background: #FCEBD9;
+    border-radius: 14px;
+    border: 0.5px solid #e8cdb0;
+    padding: 20px 24px;
+    max-width: 1100px;
+    margin: 0 auto 28px auto;
+}
+
+.filtros-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 160px;
+}
+
+.filtro-group label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a5c3a;
+}
+
+.filtro-group input,
+.filtro-group select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #4a3728;
+    background: #fff8f2;
+    border: 1px solid #e8cdb0;
+    border-radius: 8px;
+    padding: 9px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.filtro-group input:focus,
+.filtro-group select:focus {
+    border-color: #c9a87c;
+}
+
+.btn-filtrar {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff8f2;
+    background: #7a5c3a;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    align-self: flex-end;
+}
+
+.btn-filtrar:hover {
+    background: #4a3728;
+}
+
+/* Tabla */
+.tabla-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 0.5px solid #e8cdb0;
+}
+
+.reservas-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: #FCEBD9;
+}
+
+.reservas-tabla thead tr {
+    background: #e8cdb0;
+}
+
+.reservas-tabla th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 500;
+    color: #4a3728;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.reservas-tabla td {
+    padding: 12px 16px;
+    color: #4a3728;
+    border-top: 0.5px solid #e8cdb0;
+    vertical-align: middle;
+}
+
+.reservas-tabla tbody tr:hover {
+    background: #f7e8d4;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.badge-confirmada {
+    background: #e1f5ee;
+    color: #0f6e56;
+    border: 1px solid #5dcaa5;
+}
+
+.badge-pendiente {
+    background: #faeeda;
+    color: #854f0b;
+    border: 1px solid #fac775;
+}
+
+.badge-completada {
+    background: #e6f1fb;
+    color: #185fa5;
+    border: 1px solid #85b7eb;
+}
+
+.badge-cancelada {
+    background: #fcebeb;
+    color: #a32d2d;
+    border: 1px solid #f09595;
+}
+
+/* Acciones */
+.acciones-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.acciones-cell form {
+    margin: 0;
+}
+
+.form-inline {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.select-estado {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #4a3728;
+    background: #fff8f2;
+    border: 1px solid #e8cdb0;
+    border-radius: 6px;
+    padding: 5px 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.btn-actualizar {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff8f2;
+    background: #7a5c3a;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-actualizar:hover {
+    background: #4a3728;
+}
+
+.btn-eliminar {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a32d2d;
+    background: none;
+    border: 1.5px solid #f09595;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-eliminar:hover {
+    background: #fcebeb;
+}

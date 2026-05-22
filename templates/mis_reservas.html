@@ -3,44 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mis Reservas</title>
+    <title>BookNest — Mis reservas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu_cliente.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h2>Mis Reservas</h2>
-    <a href="{{ url_for('auth.menu_cliente') }}">
-        <button type="button">← Volver al menú</button>
-    </a>
+    <header>
+        <nav>
+            <a href="/menu_cliente" class="nav-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo BookNest Coffee">
+            </a>
+            <ul>
+                <li><a href="/libros_cliente">Buscar libros</a></li>
+                <li><a href="/mis_libros">Mis libros</a></li>
+                <li><a href="/reservas">Reservas</a></li>
+                <li><a href="/ver_productos">Productos</a></li>
+            </ul>
+            <a href="/logout" class="cerrar-sesion">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                    <path d="M9 12h12l-3 -3"/>
+                    <path d="M18 15l3 -3"/>
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </header>
 
-    <table border="1">
-        <tr>
-            <th>ID Reserva</th>
-            <th>Libro</th>
-            <th>Fecha</th>
-            <th>Hora Inicio</th>
-            <th>Hora Fin</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-        {% for reserva in reservas %}
-        <tr>
-            <td>{{ reserva['id_reserva'] }}</td>
-            <td>{{ reserva['titulo_libro'] }}</td>
-            <td>{{ reserva['fecha_reserva'] }}</td>
-            <td>{{ reserva['hora_inicio'] or '-' }}</td>
-            <td>{{ reserva['hora_fin'] or '-' }}</td>
-            <td>{{ reserva['estado'] }}</td>
-            <td>
-                {% if reserva['estado'] != 'cancelada' %}
-                    <form method="POST" action="{{ url_for('reservas.cancelar_reserva', id_reserva=reserva['id_reserva']) }}">
-                        <button type="submit">Cancelar</button>
-                    </form>
-                {% else %}
-                    <span>Cancelada</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <main class="mis-reservas-main">
+        <div class="mis-reservas-header">
+            <h1>Mis reservas</h1>
+            <a href="{{ url_for('auth.menu_cliente') }}" class="btn-secundario">← Volver al menú</a>
+        </div>
+
+        {% if reservas %}
+        <div class="tabla-wrap">
+            <table class="reservas-tabla">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Libro</th>
+                        <th>Fecha</th>
+                        <th>Hora inicio</th>
+                        <th>Hora fin</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                    <tr>
+                        <td>{{ reserva['id_reserva'] }}</td>
+                        <td>{{ reserva['titulo_libro'] }}</td>
+                        <td>{{ reserva['fecha_reserva'] }}</td>
+                        <td>{{ reserva['hora_inicio'] or '-' }}</td>
+                        <td>{{ reserva['hora_fin'] or '-' }}</td>
+                        <td>
+                            {% if reserva['estado'] == 'confirmada' %}
+                                <span class="badge badge-confirmada">Confirmada</span>
+                            {% elif reserva['estado'] == 'pendiente' %}
+                                <span class="badge badge-pendiente">Pendiente</span>
+                            {% else %}
+                                <span class="badge badge-cancelada">Cancelada</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if reserva['estado'] != 'cancelada' %}
+                                <form method="POST" action="{{ url_for('reservas.cancelar_reserva', id_reserva=reserva['id_reserva']) }}">
+                                    <button type="submit" class="btn-cancelar">Cancelar</button>
+                                </form>
+                            {% else %}
+                                <span class="texto-cancelada">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="sin-reservas">No tienes reservas registradas.</p>
+        {% endif %}
+    </main>
 </body>
 </html>

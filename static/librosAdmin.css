@@ -1,0 +1,329 @@
+.banner-libros {
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
+}
+
+.banner-libros img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.libros-admin-main {
+    background-color: #F3DBC3;
+    min-height: calc(100vh - 100px);
+    padding: 40px 48px;
+}
+
+.libros-admin-header {
+    max-width: 1100px;
+    margin: 0 auto 32px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.libros-admin-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+}
+
+.header-acciones {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-primario {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff8f2;
+    background: #7a5c3a;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-primario:hover {
+    background: #4a3728;
+}
+
+.btn-secundario {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7a5c3a;
+    background: none;
+    border: 1.5px solid #c9a87c;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-secundario:hover {
+    background: #e8cdb0;
+}
+
+.form-card {
+    background: #FCEBD9;
+    border-radius: 14px;
+    border: 0.5px solid #e8cdb0;
+    padding: 28px 32px;
+    max-width: 1100px;
+    margin: 0 auto 36px auto;
+}
+
+.form-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0 0 24px 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-full {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-group label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a5c3a;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #4a3728;
+    background: #fff8f2;
+    border: 1px solid #e8cdb0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #c9a87c;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.libros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.libro-card {
+    background: #FCEBD9;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 0.5px solid #e8cdb0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s;
+}
+
+.libro-card:hover {
+    transform: translateY(-4px);
+}
+
+.libro-cover {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: #e8cdb0;
+}
+
+.libro-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.libro-acciones {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(74, 55, 40, 0.75);
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.libro-card:hover .libro-acciones {
+    opacity: 1;
+}
+
+.btn-editar,
+.btn-eliminar {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-editar {
+    background: #FCEBD9;
+    color: #4a3728;
+}
+
+.btn-editar:hover {
+    background: #e8cdb0;
+}
+
+.btn-eliminar {
+    background: rgba(255,255,255,0.15);
+    color: #fff8f2;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-eliminar:hover {
+    background: rgba(200, 60, 60, 0.6);
+}
+
+.libro-info {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.libro-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+}
+
+.libro-autor {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #7a5c3a;
+    font-weight: 500;
+    margin: 0;
+}
+
+.libro-sinopsis {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #4a3728;
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(74, 55, 40, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-card {
+    background: #FCEBD9;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 0.5px solid #e8cdb0;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #7a5c3a;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.modal-close:hover {
+    background: #e8cdb0;
+}
+
+.modal-img-preview {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: block;
+}

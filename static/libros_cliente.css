@@ -1,106 +1,105 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f7e3ca;
-    color: #444;
+.catalogo-main {
+    background-color: #F3DBC3;
+    min-height: calc(100vh - 100px);
+    padding: 36px 48px;
 }
 
-
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 40px;
-    background-color: #f7e3ca;
+.catalogo-header {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
 }
 
-
-.logo img {
-    height: 120px;
+.catalogo-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #4a3728;
 }
 
-
-nav {
-    display: flex;
-    gap: 150px;
-    font-weight: bold;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.logout-icon {
-    width: 31px;
-    height: 30px;
-}
-
-
-main {
-    text-align: center;
-    padding: 20px 50px;
-}
-
-
-h1.titulo-productos {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #6b4e2c;
-}
-
-
-hr {
-    border: none;
-    height: 2px;
-    background-color: #6b4e2c;
-    width: 80%;
-    margin: 0 auto 30px auto;
-}
-
-.productos {
+.libros-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
-    grid-template-rows: repeat(2, auto); /* 2 filas */
-    gap: 40px; /* Espaciado uniforme */
-    justify-items: center;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-
-.producto {
-    text-align: center;
-    background-color: #fff8ee;
-    padding: 20px;
+.libro-card {
+    background: #FCEBD9;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 0.5px solid #e8cdb0;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
 }
 
-
-.producto img {
-    width: 120px;
-    height: auto;
-    border-radius: 4px;
+.libro-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(122, 92, 58, 0.12);
 }
 
-
-.producto p {
-    margin: 5px 0;
-    font-size: 0.95rem;
+.libro-cover {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: #e8cdb0;
 }
 
-
-.acciones-producto button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #e2d4bf;
-    color: #333;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
+.libro-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
+
+.sin-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c9a87c;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.libro-info {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.libro-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.libro-autor {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #7a5c3a;
+    margin: 0;
+}
+
+.btn-detalle {
+    display: inline-block;
+    margin-top: auto;
+    padding-top: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a5c3a;
+    text-decoration: none;
+    border-top: 0.5px solid #e8cdb0;
+    transition: color 0.15s;
+}
+
+.btn-detalle:hover {
+    color: #4a3728;
+}
+

@@ -1,0 +1,114 @@
+.formulario-main {
+    background-color: #F3DBC3;
+    min-height: calc(100vh - 100px);
+    padding: 48px 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.formulario-card {
+    background: #FCEBD9;
+    border-radius: 16px;
+    border: 0.5px solid #e8cdb0;
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 560px;
+}
+
+.formulario-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.formulario-card-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #4a3728;
+    margin: 0;
+}
+
+.btn-volver {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a5c3a;
+    background: none;
+    border: 1.5px solid #c9a87c;
+    border-radius: 8px;
+    padding: 6px 14px;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btn-volver:hover {
+    background: #e8cdb0;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a5c3a;
+}
+
+.form-group input {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #4a3728;
+    background: #fff8f2;
+    border: 1px solid #e8cdb0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #c9a87c;
+}
+
+.btn-reservar {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff8f2;
+    background: #7a5c3a;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+}
+
+.btn-reservar:hover {
+    background: #4a3728;
+}
